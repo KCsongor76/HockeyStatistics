@@ -1,0 +1,31 @@
+.logosTimers {
+    display: flex;
+    justify-content: space-between;
+}
+
+.logosTimers > div {
+    width: 50%;
+    text-align: center;
+}
+
+.logosTimers .logo{
+    width: 25%;
+}
+
+.logosTimers .logo img {
+    width: 100%;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.container > div {
+    width: 75%;
+}
+
+.container > button {
+    width: 25%;
+}
+

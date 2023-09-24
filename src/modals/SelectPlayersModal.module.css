@@ -1,0 +1,36 @@
+.container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.container > div {
+    border: 1px solid black;
+    margin-bottom: 20px;
+}
+
+.container div div {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 5px;
+}
+
+.container div div p {
+    margin: 0;
+}
+
+.container div div button {
+    padding: 5px;
+    background-color: red;
+    color: black;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.5s;
+}
+
+.container div div button:hover {
+    background-color: brown;
+    color: white;
+    transition: all 0.5s;
+    transform: scale(1.1);
+}
