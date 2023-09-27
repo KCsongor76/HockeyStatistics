@@ -6,7 +6,10 @@ import RinkImage from "../components/RinkImage";
 import StartForm from "../components/StartForm";
 
 let image = rink_up;
-
+/*
+  generates a form where everything can be selected to set the game up
+  after form submission generates the gamepage
+*/
 const StartGamePage = ({ onFinalisedGame }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [gameData, setGameData] = useState({});
@@ -39,10 +42,15 @@ const StartGamePage = ({ onFinalisedGame }) => {
       setIsSubmitted(true);
     } else {
       console.log("You can't choose the same team against each other!");
+      // TODO: insert modal instead of console.log
     }
   };
 
-  const coordDataHandler = ( coordData ) => {
+  const coordDataHandler = (coordData) => {
+    /*
+      gets all the data from the game after it's finished, 
+      lifts the state(gameData) up to the App component
+    */
     onFinalisedGame(coordData);
   };
 

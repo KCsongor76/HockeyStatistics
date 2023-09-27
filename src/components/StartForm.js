@@ -16,6 +16,30 @@ import SelectImage from "./FormElements/SelectImage";
 import Icon from "./Icon";
 import SelectIconColor from "./FormElements/SelectIconColor";
 
+/*  
+  general structures 
+    for players:
+      {
+        name: string
+        jerseyNr: int
+        position: string (char(1))
+      }
+
+    for teamcolors/iconcolors:
+      {
+        background: "#..."
+        color: "#..." (text-color)
+      }
+    
+    for teams:
+      {
+        name: string
+        players: array[player objects]
+        logo: image path
+        iconColors: iconcolors object 
+      }
+*/
+
 const players_Sapi = [
   { name: "Kristó Csongor", jerseyNr: 76, position: "D" },
   { name: "Márton Botond", jerseyNr: 97, position: "F" },
@@ -104,6 +128,9 @@ const StartForm = ({ onFormSubmit }) => {
   }, [championship]);
 
   const selectTeamHandler = (event, home) => {
+    // home === true =>  homeTeam
+    // home === false => awayTeam
+
     for (let team of allTeams) {
       if (team.name === event.target.value) {
         if (home) {
@@ -156,12 +183,13 @@ const StartForm = ({ onFormSubmit }) => {
 
       <SelectGameType gameType={gameType} onChange={setGameType} />
 
-      {/*<div className={classes.buttons}>
+      <div className={classes.buttons}>
         <button onClick={selectPlayersHandler}>
           Select non playing players
         </button>
-      </div>*/}
+      </div>
 
+      {/*TODO: convert into component*/}
       <div className={classes.colors}>
         <div>
           <label>Select home team icon colors</label>
@@ -262,12 +290,13 @@ const StartForm = ({ onFormSubmit }) => {
         </div>
       </div>
 
-      {/*<SelectPlayersModal
+      <SelectPlayersModal
+        /*TODO: fix bug (mapping array problem)*/ 
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         allHomePlayers={selectedHomeTeam.players}
         allAwayPlayers={selectedAwayTeam.players}
-          />*/}
+      />
 
       <div className={classes.imgform}>
         <SelectImage

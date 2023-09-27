@@ -4,7 +4,7 @@ import MainNavigation from "../components/MainNavigation";
 const RootLayout = () => {
   return (
     <>
-      <MainNavigation />
+      <MainNavigation /> {/* Menu points */}
       <main>
         <Outlet />
       </main>

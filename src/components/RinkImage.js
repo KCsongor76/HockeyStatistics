@@ -54,6 +54,7 @@ const RinkImage = ({
   const initialDate = `${year}-${month}-${day}`;
 
   const [date, setDate] = useState(initialDate);
+  // date: 2023-09-27
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -73,6 +74,7 @@ const RinkImage = ({
 
   const clickHandler = (event) => {
     openModal();
+    // TODO: scrolling/zooming problem - scale/move coordinates on the rinkimage
     const x = event.clientX;
     const y = event.clientY;
     setSingleCoords({ x, y });
@@ -136,7 +138,7 @@ const RinkImage = ({
     const condition1 =
       !isRunning && time === 0 && period === 3 && homeGoals !== awayGoals;
     const condition2 =
-      (period !== 1 || period !== 2 || period !== 3) && homeGoals !== awayGoals;
+      period !== 1 && period !== 2 && period !== 3 && homeGoals !== awayGoals;
 
     if (condition1 || condition2) {
       setIsGameOver(true);
@@ -161,9 +163,6 @@ const RinkImage = ({
 
     if (time === 0 && !isRunning) {
       setISEndOfPeriod(true);
-    }
-
-    if (isGameOver) {
     }
 
     return () => clearInterval(interval);
