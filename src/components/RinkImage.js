@@ -75,6 +75,7 @@ const RinkImage = ({
   const clickHandler = (event) => {
     openModal();
     // TODO: scrolling/zooming problem - scale/move coordinates on the rinkimage
+    // add fix height&width to the rink picture?
     const x = event.clientX;
     const y = event.clientY;
     setSingleCoords({ x, y });
@@ -135,6 +136,10 @@ const RinkImage = ({
   };
 
   const gameOver = () => {
+    /*
+      TODO: OT/SO goal: stop timer, dont show "next period" button, 
+      show "finalise game" button 
+    */
     const condition1 =
       !isRunning && time === 0 && period === 3 && homeGoals !== awayGoals;
     const condition2 =
@@ -175,6 +180,7 @@ const RinkImage = ({
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
+    // time: 16:35
     return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
       2,
       "0"
@@ -182,6 +188,7 @@ const RinkImage = ({
   };
 
   const teamIconSwitchHandler = () => {
+    // switch the logos in the upper corners
     if (logos.home === selectedHomeTeam.logo) {
       setLogos({
         home: selectedAwayTeam.logo,
@@ -220,6 +227,10 @@ const RinkImage = ({
   };
 
   const finaliseGameHandler = () => {
+    /* 
+      sends up data to parent (StartGamePage -> App), and then the data is sent down 
+      to the PrevGamesPage component/page.
+    */
     const data = {
       championship,
       selectedImage,

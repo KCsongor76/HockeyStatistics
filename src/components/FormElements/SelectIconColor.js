@@ -2,46 +2,74 @@ import Icon from "../Icon";
 
 import classes from "./SelectIconColor.module.css";
 
-const SelectIconColor = ({ home, homeColors, awayColors, onChange}) => {
-  const labeltext = home
+/*
+  homeColors
+  setHomeColors
+*/
+
+const SelectIconColor = ({ home, colors, onChange }) => {
+  const labelText = home
     ? "Select home team icon colors"
     : "Select away team icon colors";
 
   const colorChangeHandler = (event) => {
-    onChange(event.target.value);
+    onChange({
+      ...colors,
+      color: event.target.value,
+    });
+  };
+
+  const backgroundChangeHandler = (event) => {
+    onChange({
+      ...colors,
+      background: event.target.value,
+    });
   };
 
   return (
-    <div>
-      <label>{labeltext}</label>
-      <input
-        type="color"
-        value={homeColors.background}
-        onChange={colorChangeHandler}
-      />
+    <>
+      <div>
+        <label>{labelText}</label>
+        <div className={classes.colorSelect}>
+          <input
+            type="color"
+            value={colors.background}
+            onChange={backgroundChangeHandler}
+          />
+          <input
+            type="color"
+            value={colors.color}
+            onChange={colorChangeHandler}
+          />
+        </div>
 
-      <input
-        type="color"
-        value={homeColors.color}
-        onChange={colorChangeHandler}
-      />
+        <div className={classes.icons}>
+          <Icon
+            type="shot"
+            inmodal={true}
+            background={colors.background}
+            textColor={colors.color}
+            onClick={() => {}}
+          />
 
-      <div className={classes.icons}>
-        <Icon
-          type="shot"
-          inmodal={true}
-          background={home ? homeColors.background : awayColors.background}
-          textColor={home ? homeColors.color : awayColors.color}
-        />
+          <Icon
+            type="turnover"
+            inmodal={true}
+            background={colors.background}
+            textColor={colors.color}
+            onClick={() => {}}
+          />
 
-        <Icon
-          type="turnover"
-          inmodal={true}
-          background={home ? homeColors.background : awayColors.background}
-          textColor={home ? homeColors.color : awayColors.color}
-        />
+          <Icon
+            type="goal"
+            inmodal={true}
+            background={colors.background}
+            textColor={colors.color}
+            onClick={() => {}}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

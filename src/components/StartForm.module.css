@@ -60,19 +60,3 @@
     display: flex;
     justify-content: space-between;
 }
-
-.colorSelect {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.colorSelect input {
-    width: 50%;
-}
-
-.icons {
-    display: flex;
-    justify-content: space-between;
-}
-

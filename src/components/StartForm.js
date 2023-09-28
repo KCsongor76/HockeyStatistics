@@ -128,9 +128,7 @@ const StartForm = ({ onFormSubmit }) => {
   }, [championship]);
 
   const selectTeamHandler = (event, home) => {
-    // home === true =>  homeTeam
-    // home === false => awayTeam
-
+    // handles the team select part of the form
     for (let team of allTeams) {
       if (team.name === event.target.value) {
         if (home) {
@@ -143,6 +141,10 @@ const StartForm = ({ onFormSubmit }) => {
   };
 
   const submitHandler = (event) => {
+    /* 
+      sends data up to the parent component (StartGamePage),
+      where this data is passed down to the game page.
+     */
     event.preventDefault();
 
     const data = {
@@ -189,114 +191,26 @@ const StartForm = ({ onFormSubmit }) => {
         </button>
       </div>
 
-      {/*TODO: convert into component*/}
-      <div className={classes.colors}>
-        <div>
-          <label>Select home team icon colors</label>
-          <div className={classes.colorSelect}>
-            <input
-              type="color"
-              value={homeColors.background}
-              onChange={(event) => {
-                setHomeColors({
-                  ...homeColors,
-                  background: event.target.value,
-                });
-              }}
-            />
-            <input
-              type="color"
-              value={homeColors.color}
-              onChange={(event) => {
-                setHomeColors({ ...homeColors, color: event.target.value });
-              }}
-            />
-          </div>
-
-          <div className={classes.icons}>
-            <Icon
-              type="shot"
-              inmodal={true}
-              background={homeColors.background}
-              textColor={homeColors.color}
-              onClick={() => {}}
-            />
-
-            <Icon
-              type="turnover"
-              inmodal={true}
-              background={homeColors.background}
-              textColor={homeColors.color}
-              onClick={() => {}}
-            />
-
-            <Icon
-              type="goal"
-              inmodal={true}
-              background={homeColors.background}
-              textColor={homeColors.color}
-              onClick={() => {}}
-            />
-          </div>
-        </div>
-
-        <div>
-          <label>Select away team icon colors</label>
-          <div className={classes.colorSelect}>
-            <input
-              type="color"
-              value={awayColors.background}
-              onChange={(event) => {
-                setAwayColors({
-                  ...awayColors,
-                  background: event.target.value,
-                });
-              }}
-            />
-            <input
-              type="color"
-              value={awayColors.color}
-              onChange={(event) => {
-                setAwayColors({ ...awayColors, color: event.target.value });
-              }}
-            />
-          </div>
-
-          <div className={classes.icons}>
-            <Icon
-              type="shot"
-              inmodal={true}
-              background={awayColors.background}
-              textColor={awayColors.color}
-              onClick={() => {}}
-            />
-
-            <Icon
-              type="turnover"
-              inmodal={true}
-              background={awayColors.background}
-              textColor={awayColors.color}
-              onClick={() => {}}
-            />
-
-            <Icon
-              type="goal"
-              inmodal={true}
-              background={awayColors.background}
-              textColor={awayColors.color}
-              onClick={() => {}}
-            />
-          </div>
-        </div>
-      </div>
-
       <SelectPlayersModal
-        /*TODO: fix bug (mapping array problem)*/ 
+        /*TODO: fix bug (mapping array problem)*/
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         allHomePlayers={selectedHomeTeam.players}
         allAwayPlayers={selectedAwayTeam.players}
       />
+
+      <div className={classes.colors}>
+        <SelectIconColor
+          home={true}
+          colors={homeColors}
+          onChange={setHomeColors}
+        />
+        <SelectIconColor
+          home={false}
+          colors={awayColors}
+          onChange={setAwayColors}
+        />
+      </div>
 
       <div className={classes.imgform}>
         <SelectImage

@@ -7,8 +7,8 @@ import StartForm from "../components/StartForm";
 
 let image = rink_up;
 /*
-  generates a form where everything can be selected to set the game up
-  after form submission generates the gamepage
+  generates a form where everything can be selected to set the game up.
+  after form submission: generates the gamepage
 */
 const StartGamePage = ({ onFinalisedGame }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);

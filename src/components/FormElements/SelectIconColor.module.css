@@ -1,4 +1,14 @@
+.colorSelect {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.colorSelect input {
+    width: 50%;
+}
+
 .icons {
     display: flex;
-    gap: 20px;
+    justify-content: space-between;
 }
