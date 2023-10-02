@@ -23,7 +23,7 @@ const RinkImage = ({
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [gameModalIsOpen, setGameModalIsOpen] = useState(false);
 
-  const [time, setTime] = useState(5); // TODO: back to 20*60
+  const [time, setTime] = useState(3); // TODO: back to 20*60
   const [isRunning, setIsRunning] = useState(false);
   const [period, setPeriod] = useState(1);
   const [periodCounter, setPeriodCounter] = useState(1);
@@ -75,7 +75,7 @@ const RinkImage = ({
   const clickHandler = (event) => {
     openModal();
     // TODO: scrolling/zooming problem - scale/move coordinates on the rinkimage
-    // add fix height&width to the rink picture?
+    // add fix height & width to the rink picture?
     const x = event.clientX;
     const y = event.clientY;
     setSingleCoords({ x, y });
@@ -140,6 +140,14 @@ const RinkImage = ({
       TODO: OT/SO goal: stop timer, dont show "next period" button, 
       show "finalise game" button 
     */
+    /*
+      Regular Season:
+        game ends, when:
+          period === 3 && !isRunning && homeGoals !== awayGoals
+          OR
+          (period === 'OT' || period === 'SO') && homeGoals !== awayGoals
+          
+    */
     const condition1 =
       !isRunning && time === 0 && period === 3 && homeGoals !== awayGoals;
     const condition2 =
@@ -151,6 +159,15 @@ const RinkImage = ({
   };
 
   useEffect(() => {
+    /* 
+    TODO: when additional button shows up, dont move the page
+    eg. "Go to next period button show up under the "Start/Stop time" button,
+    and it pushes down rink image
+    solution: styling?
+
+    TODO: 
+      bugs: period 3, game ends, it still shows "Go to next period"
+    */
     let interval;
 
     scoreViewHandler();
@@ -178,6 +195,7 @@ const RinkImage = ({
   };
 
   const formatTime = (time) => {
+    // TODO: show hundreds also, when the period ends: 1.26 seconds left -> 00:01.26;
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
     // time: 16:35
@@ -206,12 +224,12 @@ const RinkImage = ({
     if (period < 3) {
       setPeriod((prevPeriod) => prevPeriod + 1);
       //setTime(20 * 60);
-      setTime(5);
+      setTime(3);
     } else if (gameType === "regular") {
       if (period === 3) {
         setPeriod("OT");
         //setTime(20 * 5);
-        setTime(5);
+        setTime(3);
       } else if (period === "OT") {
         setPeriod("SO");
         setTime(1);
@@ -221,7 +239,7 @@ const RinkImage = ({
       setPeriod("OT" + periodCounter);
       setPeriodCounter((prevCounter) => prevCounter + 1);
       //setTime(20 * 60);
-      setTime(5);
+      setTime(3);
     }
     setISEndOfPeriod(false);
   };

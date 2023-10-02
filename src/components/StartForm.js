@@ -185,6 +185,8 @@ const StartForm = ({ onFormSubmit }) => {
 
       <SelectGameType gameType={gameType} onChange={setGameType} />
 
+      {/*
+      
       <div className={classes.buttons}>
         <button onClick={selectPlayersHandler}>
           Select non playing players
@@ -192,12 +194,19 @@ const StartForm = ({ onFormSubmit }) => {
       </div>
 
       <SelectPlayersModal
-        /*TODO: fix bug (mapping array problem)*/
+        /*
+        TODO: fix bug (mapping array problem?)
+        TODO: maybe add another attribute to the players, and in the game, 
+              show only the ones who play from the array
+              eg. isPlaying: boolean
+        */
+        /*
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         allHomePlayers={selectedHomeTeam.players}
         allAwayPlayers={selectedAwayTeam.players}
       />
+      */}
 
       <div className={classes.colors}>
         <SelectIconColor

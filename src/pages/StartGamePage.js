@@ -1,18 +1,29 @@
 import rink_up from "../images/rink/icerink_up.jpg";
 import rink_down from "../images/rink/icerink_down.jpg";
 import { useState } from "react";
+import Modal from "react-modal";
 
 import RinkImage from "../components/RinkImage";
 import StartForm from "../components/StartForm";
+import SameTeamModal from "../modals/SameTeamModal";
 
-let image = rink_up;
 /*
-  generates a form where everything can be selected to set the game up.
-  after form submission: generates the gamepage
+generates a form where everything can be selected to set the game up.
+after form submission: generates the gamepage
 */
+let image = rink_up;
 const StartGamePage = ({ onFinalisedGame }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [gameData, setGameData] = useState({});
+  const [modalIsOpen, setModalISOpen] = useState(false);
+
+  const openModal = () => {
+    setModalISOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalISOpen(false);
+  };
 
   const formSubmitHandler = ({
     championship,
@@ -41,8 +52,7 @@ const StartGamePage = ({ onFinalisedGame }) => {
       });
       setIsSubmitted(true);
     } else {
-      console.log("You can't choose the same team against each other!");
-      // TODO: insert modal instead of console.log
+      openModal();
     }
   };
 
@@ -56,6 +66,8 @@ const StartGamePage = ({ onFinalisedGame }) => {
 
   return (
     <>
+      <SameTeamModal isOpen={modalIsOpen} onRequestClose={closeModal} />
+
       {!isSubmitted && <StartForm onFormSubmit={formSubmitHandler} />}
       {isSubmitted && (
         <RinkImage
