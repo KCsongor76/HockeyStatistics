@@ -9,7 +9,6 @@ import PrevGamesPage from "./pages/PrevGamesPage";
 import GameDetailPage from "./pages/GameDetailPage";
 import { useState } from "react";
 
-/* */
 function App() {
   const [prevGames, setPrevGames] = useState([]);
 
