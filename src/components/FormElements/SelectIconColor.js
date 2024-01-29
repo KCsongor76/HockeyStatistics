@@ -1,11 +1,7 @@
 import Icon from "../Icon";
+import IconRow from "../IconRow";
 
 import classes from "./SelectIconColor.module.css";
-
-/*
-  homeColors
-  setHomeColors
-*/
 
 const SelectIconColor = ({ home, colors, onChange }) => {
   const labelText = home
@@ -68,6 +64,8 @@ const SelectIconColor = ({ home, colors, onChange }) => {
             onClick={() => {}}
           />
         </div>
+        {/*<IconRow home={true} colors={colors} iconClickHandler={() => {}} />*/}
+        {/* TODO: solve styling of the component */}
       </div>
     </>
   );

@@ -30,7 +30,7 @@ const GameDetailPage = () => {
           - etc...
       */}
       <div>
-        <img src={gameData.selectedImage}></img>
+        <img src={gameData.selectedImage} alt="img"></img>
       </div>
     </>
   );

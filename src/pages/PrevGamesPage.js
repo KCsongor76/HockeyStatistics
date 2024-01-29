@@ -1,4 +1,4 @@
-import { useState } from "react";
+import PrevGame from "../components/PrevGame";
 import classes from "./PrevGamesPage.module.css";
 import { useNavigate } from "react-router-dom";
 
@@ -19,31 +19,7 @@ const PrevGamesPage = () => {
       <div className={classes.container}>
         {prevGamesData &&
           prevGamesData.map((prevGame) => (
-            <div
-              className={classes.game}
-              onClick={() => navigateHandler(prevGame.gameIndex)}
-              key={prevGame.gameIndex}
-            >
-              <div>
-                <img src={prevGame.selectedHomeTeam.logo}></img>
-              </div>
-
-              <div>
-                <p>{prevGame.date}</p>
-                <p>
-                  {prevGame.championship === "romanian" &&
-                    "Romanian Championship"}
-                  {prevGame.championship === "euhl" && "EUHL"}
-                </p>
-                <p>
-                  Score: {prevGame.homeGoals} - {prevGame.awayGoals}
-                </p>
-              </div>
-
-              <div>
-                <img src={prevGame.selectedAwayTeam.logo}></img>
-              </div>
-            </div>
+            <PrevGame prevGame={prevGame} navigateHandler={navigateHandler} />
           ))}
         {!prevGamesData && <p>No games found.</p>}
       </div>

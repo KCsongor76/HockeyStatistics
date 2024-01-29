@@ -1,74 +1,44 @@
 import rink_up from "../images/rink/icerink_up.jpg";
-import rink_down from "../images/rink/icerink_down.jpg";
 import { useState } from "react";
-import Modal from "react-modal";
 
 import RinkImage from "../components/RinkImage";
 import StartForm from "../components/StartForm";
-import SameTeamModal from "../modals/SameTeamModal";
 
-/*
-generates a form where everything can be selected to set the game up.
-after form submission: generates the gamepage
-*/
+import { formSubmitHandler } from "../functions/startGamePageFunctions";
+import DynamicInformativeModal from "../modals/DynamicInformativeModal";
+
 let image = rink_up;
+/**
+ * generates a form where everything can be selected to set the game up. After form submission: generates the gamepage
+ * @param {*} param0
+ * @returns
+ */
 const StartGamePage = ({ onFinalisedGame }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [gameData, setGameData] = useState({});
-  const [modalIsOpen, setModalISOpen] = useState(false);
-
-  const openModal = () => {
-    setModalISOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalISOpen(false);
-  };
-
-  const formSubmitHandler = ({
-    championship,
-    gameType,
-    selectedImage,
-    selectedHomeTeam,
-    selectedAwayTeam,
-    homeColors,
-    awayColors,
-  }) => {
-    if (selectedImage === "option1") {
-      image = rink_down;
-    } else {
-      image = rink_up;
-    }
-
-    if (selectedHomeTeam !== selectedAwayTeam) {
-      setGameData({
-        championship,
-        gameType,
-        selectedImage,
-        selectedHomeTeam,
-        selectedAwayTeam,
-        homeColors,
-        awayColors,
-      });
-      setIsSubmitted(true);
-    } else {
-      openModal();
-    }
-  };
-
-  const coordDataHandler = (coordData) => {
-    /*
-      gets all the data from the game after it's finished, 
-      lifts the state(gameData) up to the App component
-    */
-    onFinalisedGame(coordData);
-  };
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   return (
     <>
-      <SameTeamModal isOpen={modalIsOpen} onRequestClose={closeModal} />
+      <DynamicInformativeModal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+      />
 
-      {!isSubmitted && <StartForm onFormSubmit={formSubmitHandler} />}
+      {!isSubmitted && (
+        <StartForm
+          onFormSubmit={(gameData) =>
+            formSubmitHandler(
+              gameData,
+              image,
+              setGameData,
+              setIsSubmitted,
+              setModalIsOpen
+            )
+          }
+        />
+      )}
+
       {isSubmitted && (
         <RinkImage
           championship={gameData.championship}
@@ -78,7 +48,7 @@ const StartGamePage = ({ onFinalisedGame }) => {
           selectedAwayTeam={gameData.selectedAwayTeam}
           homeColors={gameData.homeColors}
           awayColors={gameData.awayColors}
-          onFinalisedGame={coordDataHandler}
+          onFinalisedGame={(coordData) => onFinalisedGame(coordData)} // sends the coordData up to the App
         />
       )}
     </>

@@ -1,192 +1,133 @@
 import rink_up from "../images/rink/icerink_up.jpg";
-import rink_down from "../images/rink/icerink_down.jpg";
-
-import logo_sapi from "../images/logo/sapi.png";
-import logo_sportklub from "../images/logo/sccs.png";
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import classes from "./StartForm.module.css";
-import SelectPlayersModal from "../modals/SelectPlayersModal";
-import SelectChampionship from "./FormElements/SelectChampionship";
-import SelectTeam from "./FormElements/SelectTeam";
-import SelectGameType from "./FormElements/SelectGameType";
 import SelectImage from "./FormElements/SelectImage";
-import Icon from "./Icon";
 import SelectIconColor from "./FormElements/SelectIconColor";
 
-/*  
-  general structures 
-    for players:
-      {
-        name: string
-        jerseyNr: int
-        position: string (char(1))
-      }
+import {
+  selectTeamHandler,
+  submitHandler,
+} from "../functions/startFormFunctions";
 
-    for teamcolors/iconcolors:
-      {
-        background: "#..."
-        color: "#..." (text-color)
-      }
-    
-    for teams:
-      {
-        name: string
-        players: array[player objects]
-        logo: image path
-        iconColors: iconcolors object 
-      }
-*/
+import DynamicSelectComponent from "./FormElements/DynamicSelectComponent";
 
-const players_Sapi = [
-  { name: "Kristó Csongor", jerseyNr: 76, position: "D" },
-  { name: "Márton Botond", jerseyNr: 97, position: "F" },
-  { name: "Bíró Nándor", jerseyNr: 30, position: "G" },
-];
-
-const players_Sportklub = [
-  { name: "Salló Alpár", jerseyNr: 55, position: "D" },
-  { name: "Becze Tihamér", jerseyNr: 20, position: "F" },
-  { name: "Ambrus Levente", jerseyNr: 72, position: "G" },
-];
-const playersA = [];
-const playersB = [];
-
-const defaultIconColors = { background: "#000000", color: "#FFFFFF" };
-
-const team1 = {
-  name: "Sapientia U23",
-  players: players_Sapi,
-  logo: logo_sapi,
-  iconColors: { defaultIconColors },
-};
-const team2 = {
-  name: "Sportklub Csíkszereda",
-  players: players_Sportklub,
-  logo: logo_sportklub,
-  iconColors: { defaultIconColors },
-};
-const teamA = {
-  name: "Team A",
-  players: playersA,
-  iconColors: { defaultIconColors },
-};
-const teamB = {
-  name: "Team B",
-  players: playersB,
-  iconColors: { defaultIconColors },
-};
-
-const teamsROM = [team1, team2];
-const teamsEUHL = [teamA, teamB];
+import {
+  teamsEUHL,
+  teamsROM,
+  defaultIconColors,
+} from "../functions/startFormFunctions";
+import SelectPlayersModal from "../modals/SelectPlayersModal";
 
 const StartForm = ({ onFormSubmit }) => {
   const [championship, setChampionship] = useState("romanian");
   const [gameType, setGameType] = useState("regular");
   const [selectedImage, setSelectedImage] = useState(rink_up);
+
   const [selectedHomeTeam, setSelectedHomeTeam] = useState(teamsROM[0]);
   const [selectedAwayTeam, setSelectedAwayTeam] = useState(teamsROM[1]);
+
   const [homeColors, setHomeColors] = useState(defaultIconColors);
   const [awayColors, setAwayColors] = useState(defaultIconColors);
 
   const [allTeams, setAllTeams] = useState(teamsROM);
-
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
 
   const navigate = useNavigate();
 
-  const navigateHandler = () => {
-    navigate("/");
-  };
-
-  const selectPlayersHandler = (event) => {
-    event.preventDefault();
-
-    openModal();
-  };
-
   useEffect(() => {
+    // Reset everything when the championship changes
     if (championship === "romanian") {
       setAllTeams(teamsROM);
       setSelectedHomeTeam(teamsROM[0]);
       setSelectedAwayTeam(teamsROM[1]);
     } else if (championship === "euhl") {
+      setAllTeams(teamsEUHL);
       setSelectedHomeTeam(teamsEUHL[0]);
       setSelectedAwayTeam(teamsEUHL[1]);
-      setAllTeams(teamsEUHL);
     }
+    setHomeColors(defaultIconColors);
+    setAwayColors(defaultIconColors);
   }, [championship]);
 
-  const selectTeamHandler = (event, home) => {
-    // handles the team select part of the form
-    for (let team of allTeams) {
-      if (team.name === event.target.value) {
-        if (home) {
-          setSelectedHomeTeam(team);
-        } else {
-          setSelectedAwayTeam(team);
-        }
-      }
-    }
+  useEffect(() => {
+    setHomeColors(defaultIconColors);
+  }, [selectedHomeTeam]);
+
+  useEffect(() => {
+    setAwayColors(defaultIconColors);
+  }, [selectedAwayTeam]);
+
+  const data = {
+    championship,
+    gameType,
+    selectedImage,
+    selectedHomeTeam,
+    selectedAwayTeam,
+    homeColors,
+    awayColors,
   };
 
-  const submitHandler = (event) => {
-    /* 
-      sends data up to the parent component (StartGamePage),
-      where this data is passed down to the game page.
-     */
+  const selectPlayersHandler = (event) => {
     event.preventDefault();
-
-    const data = {
-      championship,
-      gameType,
-      selectedImage,
-      selectedHomeTeam,
-      selectedAwayTeam,
-      homeColors,
-      awayColors,
-    };
-
-    onFormSubmit(data);
+    setModalIsOpen(true);
   };
+
+  console.log(selectedHomeTeam);
 
   return (
-    <form className={classes.form} onSubmit={submitHandler}>
-      <SelectChampionship
+    <form
+      className={classes.form}
+      onSubmit={(event) => submitHandler(event, data, onFormSubmit)}
+    >
+      <DynamicSelectComponent
+        type="championship"
         championship={championship}
         onChange={setChampionship}
       />
 
-      <SelectTeam
+      <DynamicSelectComponent
+        type="hometeam"
         home={true}
         selectedHomeTeam={selectedHomeTeam}
         selectedAwayTeam={selectedAwayTeam}
         allTeams={allTeams}
-        onChange={(event) => selectTeamHandler(event, true)}
+        onChange={(event) =>
+          selectTeamHandler(
+            event,
+            true,
+            allTeams,
+            setSelectedHomeTeam,
+            setSelectedAwayTeam
+          )
+        }
       />
 
-      <SelectTeam
+      <DynamicSelectComponent
+        type="awayteam"
         home={false}
         selectedHomeTeam={selectedHomeTeam}
         selectedAwayTeam={selectedAwayTeam}
         allTeams={allTeams}
-        onChange={(event) => selectTeamHandler(event, false)}
+        onChange={(event) =>
+          selectTeamHandler(
+            event,
+            false,
+            allTeams,
+            setSelectedHomeTeam,
+            setSelectedAwayTeam
+          )
+        }
       />
 
-      <SelectGameType gameType={gameType} onChange={setGameType} />
+      <DynamicSelectComponent
+        type="gametype"
+        gameType={gameType}
+        onChange={setGameType}
+      />
 
-      {/*
-      
       <div className={classes.buttons}>
         <button onClick={selectPlayersHandler}>
           Select non playing players
@@ -194,19 +135,12 @@ const StartForm = ({ onFormSubmit }) => {
       </div>
 
       <SelectPlayersModal
-        /*
-        TODO: fix bug (mapping array problem?)
-        TODO: maybe add another attribute to the players, and in the game, 
-              show only the ones who play from the array
-              eg. isPlaying: boolean
-        */
-        /*
         isOpen={modalIsOpen}
-        onRequestClose={closeModal}
+        onRequestClose={() => setModalIsOpen(false)}
         allHomePlayers={selectedHomeTeam.players}
         allAwayPlayers={selectedAwayTeam.players}
+        onChange={[setSelectedHomeTeam, setSelectedAwayTeam]}
       />
-      */}
 
       <div className={classes.colors}>
         <SelectIconColor
@@ -236,7 +170,7 @@ const StartForm = ({ onFormSubmit }) => {
       </div>
 
       <div className={classes.buttons}>
-        <button onClick={navigateHandler}>Go Back</button>
+        <button onClick={() => navigate("/")}>Go Back</button>
         <button type="submit">Start the game!</button>
       </div>
     </form>
