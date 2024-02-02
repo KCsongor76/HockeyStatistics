@@ -1,3 +1,9 @@
+/**
+ * This component is responsible for
+ * rendering an action icon.
+ * @param {*} param0
+ * @returns
+ */
 const Icon = ({
   x,
   y,

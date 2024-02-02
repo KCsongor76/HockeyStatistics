@@ -1,9 +1,8 @@
 export const clickHandler = (event, setModalIsOpen, setSingleCoords) => {
   setModalIsOpen(true);
-  // TODO: scrolling/zooming problem - scale/move coordinates on the rinkimage
-  // add fix height & width to the rink picture?
+
   const x = event.clientX;
-  const y = event.clientY;
+  const y = event.clientY + window.scrollY; // when the page is scrolled, the icon is above by exactly window.scrollY.
   setSingleCoords({ x, y });
 };
 
@@ -100,7 +99,6 @@ export const gameOver = (
 };
 
 export const formatTime = (time) => {
-  // TODO: show hundreds also, when the period ends: 1.26 seconds left -> 00:01.26;
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
   // time: 16:35
@@ -142,12 +140,12 @@ export const timeAndPeriodHandler = (
   if (period < 3) {
     setPeriod((prevPeriod) => prevPeriod + 1);
     //setTime(20 * 60);
-    setTime(3);
+    setTime(1);
   } else if (gameType === "regular") {
     if (period === 3) {
       setPeriod("OT");
       //setTime(20 * 5);
-      setTime(3);
+      setTime(1);
     } else if (period === "OT") {
       setPeriod("SO");
       setTime(1);
@@ -157,11 +155,15 @@ export const timeAndPeriodHandler = (
     setPeriod("OT" + periodCounter);
     setPeriodCounter((prevCounter) => prevCounter + 1);
     //setTime(20 * 60);
-    setTime(3);
+    setTime(1);
   }
   setISEndOfPeriod(false);
 };
 
+/**
+ *sends up data to parent (StartGamePage -> App), and then the data is sent down
+ *to the PrevGamesPage component/page.
+ */
 export const finaliseGameHandler = (
   championship,
   selectedImage,
@@ -178,12 +180,46 @@ export const finaliseGameHandler = (
   awayTurnovers,
   initialDate,
   clickCoordinates,
+  imageTop,
   onFinalisedGame
 ) => {
-  /* 
-      sends up data to parent (StartGamePage -> App), and then the data is sent down 
-      to the PrevGamesPage component/page.
-    */
+  const updatePlayerAttributes = (player, attribute) => {
+    if (!player[attribute]) {
+      player[attribute] = 1;
+    } else {
+      player[attribute] += 1;
+    }
+  };
+
+  selectedHomeTeam.players.forEach((player) => {
+    player.shot = 0;
+    player.goal = 0;
+    player.turnover = 0;
+  });
+  selectedAwayTeam.players.forEach((player) => {
+    player.shot = 0;
+    player.goal = 0;
+    player.turnover = 0;
+  });
+
+  // Update attributes for the selectedHomeTeam players
+  selectedHomeTeam.players.forEach((player) => {
+    clickCoordinates.forEach((coordinate) => {
+      if (coordinate.player === player) {
+        updatePlayerAttributes(player, coordinate.type);
+      }
+    });
+  });
+
+  // Update attributes for the selectedAwayTeam players
+  selectedAwayTeam.players.forEach((player) => {
+    clickCoordinates.forEach((coordinate) => {
+      if (coordinate.player === player) {
+        updatePlayerAttributes(player, coordinate.type);
+      }
+    });
+  });
+
   const data = {
     championship,
     selectedImage,
@@ -200,6 +236,8 @@ export const finaliseGameHandler = (
     awayTurnovers,
     initialDate,
     clickCoordinates,
+    imageTop,
   };
+  console.log(data);
   onFinalisedGame(data);
 };

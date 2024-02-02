@@ -4,28 +4,23 @@
     align-items: center;
 }
 
-.game {
-    width: 90%;
-    margin: 10px 0;
-    border: 1px solid black;
-    border-radius: 10px;
-    text-align: center;
-    transition: background-color 0.5s;
-
+.formContainer {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    max-width: 400px;
+    margin: auto;
 }
 
-.game:hover {
-    cursor: pointer;
-    background-color: antiquewhite;
-    transition: background-color 0.5s;
+.label {
+    margin-bottom: 8px;
+    font-weight: bold;
 }
 
-.game div {
-    width: 33%;
-}
-
-.game div img {
-    width: 70%;
+.select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }

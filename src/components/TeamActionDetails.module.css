@@ -1,0 +1,14 @@
+.iconStatContainer {
+    display: flex;
+    align-items: center;
+}
+
+.titleLogo {
+    display: flex;
+    margin: 10px 0;
+}
+
+.titleLogo img {
+    width: 3rem;
+    height: 3rem
+}

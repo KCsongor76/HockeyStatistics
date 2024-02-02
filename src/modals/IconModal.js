@@ -7,6 +7,12 @@ import PlayerList from "../components/PlayerList";
 
 Modal.setAppElement("#root"); // Required for accessibility
 
+/**
+ * This component is responsible for the whole process of
+ * selecting the action and the player.
+ * @param {*} param0
+ * @returns
+ */
 const IconModal = ({
   isOpen,
   onRequestClose,

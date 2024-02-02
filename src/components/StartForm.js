@@ -21,6 +21,11 @@ import {
 } from "../functions/startFormFunctions";
 import SelectPlayersModal from "../modals/SelectPlayersModal";
 
+/**
+ * This component renders the form before starting the game.
+ * @param {*} param0
+ * @returns
+ */
 const StartForm = ({ onFormSubmit }) => {
   const [championship, setChampionship] = useState("romanian");
   const [gameType, setGameType] = useState("regular");
@@ -53,12 +58,17 @@ const StartForm = ({ onFormSubmit }) => {
   }, [championship]);
 
   useEffect(() => {
-    setHomeColors(defaultIconColors);
+    //setHomeColors(defaultIconColors);
   }, [selectedHomeTeam]);
 
   useEffect(() => {
-    setAwayColors(defaultIconColors);
+    //setAwayColors(defaultIconColors);
   }, [selectedAwayTeam]);
+
+  const selectPlayersHandler = (event) => {
+    event.preventDefault();
+    setModalIsOpen(true);
+  };
 
   const data = {
     championship,
@@ -69,13 +79,6 @@ const StartForm = ({ onFormSubmit }) => {
     homeColors,
     awayColors,
   };
-
-  const selectPlayersHandler = (event) => {
-    event.preventDefault();
-    setModalIsOpen(true);
-  };
-
-  console.log(selectedHomeTeam);
 
   return (
     <form

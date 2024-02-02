@@ -1,4 +1,4 @@
-import rink_up from "../images/rink/icerink_up.jpg";
+
 import { useState } from "react";
 
 import RinkImage from "../components/RinkImage";
@@ -7,16 +7,19 @@ import StartForm from "../components/StartForm";
 import { formSubmitHandler } from "../functions/startGamePageFunctions";
 import DynamicInformativeModal from "../modals/DynamicInformativeModal";
 
-let image = rink_up;
 /**
- * generates a form where everything can be selected to set the game up. After form submission: generates the gamepage
- * @param {*} param0
+ * This component is responsible for the "Start Game" page,
+ * which contains both the starting form, and the
+ * statistics writing page.
+ * @param {} param0
  * @returns
  */
 const StartGamePage = ({ onFinalisedGame }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [gameData, setGameData] = useState({});
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  console.log(gameData);
 
   return (
     <>
@@ -30,7 +33,6 @@ const StartGamePage = ({ onFinalisedGame }) => {
           onFormSubmit={(gameData) =>
             formSubmitHandler(
               gameData,
-              image,
               setGameData,
               setIsSubmitted,
               setModalIsOpen
@@ -43,7 +45,7 @@ const StartGamePage = ({ onFinalisedGame }) => {
         <RinkImage
           championship={gameData.championship}
           gameType={gameData.gameType}
-          selectedImage={image}
+          selectedImage={gameData.selectedImage}
           selectedHomeTeam={gameData.selectedHomeTeam}
           selectedAwayTeam={gameData.selectedAwayTeam}
           homeColors={gameData.homeColors}

@@ -11,6 +11,11 @@ import { useState } from "react";
 
 import { gameDataHandler } from "./functions/appFunctions";
 
+/**
+ * This component is responsible for the whole project,
+ * and specifically, for the routing.
+ * @returns
+ */
 function App() {
   const [prevGames, setPrevGames] = useState([]);
 

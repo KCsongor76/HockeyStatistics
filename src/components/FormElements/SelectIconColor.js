@@ -1,8 +1,13 @@
 import Icon from "../Icon";
-import IconRow from "../IconRow";
 
 import classes from "./SelectIconColor.module.css";
 
+/**
+ * This component is responsible for displaying and choosing
+ * the colours for a team.
+ * @param {*} param0
+ * @returns
+ */
 const SelectIconColor = ({ home, colors, onChange }) => {
   const labelText = home
     ? "Select home team icon colors"

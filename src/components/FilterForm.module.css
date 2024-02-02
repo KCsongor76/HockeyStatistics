@@ -1,0 +1,17 @@
+.coordinateFormContainer {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+}
+
+.periodsContainer,
+.typesContainer {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+}

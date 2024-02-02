@@ -1,0 +1,27 @@
+.tableContainer {
+    font-family: Arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.tableContainer th,
+.tableContainer td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.tableContainer th {
+    cursor: pointer;
+    /*background-color: #f2f2f2;*/
+}
+
+.tableContainer th:hover {
+    background-color: #3f8641;
+}
+
+.highlight {
+    background-color: #3f8641;
+    color: white;
+}

@@ -13,6 +13,12 @@ import SelectPlayersList from "../components/SelectPlayersList";
 
 Modal.setAppElement("#root"); // Required for accessibility
 
+/**
+ * This component renders a modal, which is responsible for
+ * selecting/deselecting players from the starting roster
+ * @param {*} param0
+ * @returns
+ */
 const SelectPlayersModal = ({
   isOpen,
   onRequestClose,
@@ -28,6 +34,34 @@ const SelectPlayersModal = ({
 
   const [setSelectedHomeTeam, setSelectedAwayTeam] = onChange;
 
+  const setters = {
+    setPlayingHomePlayers,
+    setNonPlayingHomePlayers,
+    setPlayingAwayPlayers,
+    setNonPlayingAwayPlayers,
+  };
+
+  const players1 = {
+    selectedPlayers: playingHomePlayers,
+    playingPlayers: playingHomePlayers,
+    nonPlayingPlayers: nonPlayingHomePlayers,
+  };
+  const players2 = {
+    selectedPlayers: playingAwayPlayers,
+    playingPlayers: playingAwayPlayers,
+    nonPlayingPlayers: nonPlayingAwayPlayers,
+  };
+  const players3 = {
+    selectedPlayers: nonPlayingHomePlayers,
+    playingPlayers: playingHomePlayers,
+    nonPlayingPlayers: nonPlayingHomePlayers,
+  };
+  const players4 = {
+    selectedPlayers: nonPlayingAwayPlayers,
+    playingPlayers: playingAwayPlayers,
+    nonPlayingPlayers: nonPlayingAwayPlayers,
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -38,52 +72,32 @@ const SelectPlayersModal = ({
       <h3>Remove players from roster</h3>
       <div className={classes.container}>
         <SelectPlayersList
-          selectedPlayers={playingHomePlayers}
-          playingPlayers={playingHomePlayers}
+          players={players1}
+          setters={setters}
           playerHandler={removePlayerHandler}
-          nonPlayingPlayers={nonPlayingHomePlayers}
           home={true}
-          setPlayingHomePlayers={setPlayingHomePlayers}
-          setNonPlayingHomePlayers={setNonPlayingHomePlayers}
-          setPlayingAwayPlayers={setPlayingAwayPlayers}
-          setNonPlayingAwayPlayers={setNonPlayingAwayPlayers}
         />
         <SelectPlayersList
-          selectedPlayers={playingAwayPlayers}
-          playingPlayers={playingAwayPlayers}
+          players={players2}
+          setters={setters}
           playerHandler={removePlayerHandler}
-          nonPlayingPlayers={nonPlayingAwayPlayers}
           home={false}
-          setPlayingHomePlayers={setPlayingHomePlayers}
-          setNonPlayingHomePlayers={setNonPlayingHomePlayers}
-          setPlayingAwayPlayers={setPlayingAwayPlayers}
-          setNonPlayingAwayPlayers={setNonPlayingAwayPlayers}
         />
       </div>
 
       <h3>Add players to roster</h3>
       <div className={classes.container}>
         <SelectPlayersList
-          selectedPlayers={nonPlayingHomePlayers}
-          playingPlayers={playingHomePlayers}
+          players={players3}
+          setters={setters}
           playerHandler={addPlayerHandler}
-          nonPlayingPlayers={nonPlayingHomePlayers}
           home={true}
-          setPlayingHomePlayers={setPlayingHomePlayers}
-          setNonPlayingHomePlayers={setNonPlayingHomePlayers}
-          setPlayingAwayPlayers={setPlayingAwayPlayers}
-          setNonPlayingAwayPlayers={setNonPlayingAwayPlayers}
         />
         <SelectPlayersList
-          selectedPlayers={nonPlayingAwayPlayers}
-          playingPlayers={playingAwayPlayers}
+          players={players4}
+          setters={setters}
           playerHandler={addPlayerHandler}
-          nonPlayingPlayers={nonPlayingAwayPlayers}
           home={false}
-          setPlayingHomePlayers={setPlayingHomePlayers}
-          setNonPlayingHomePlayers={setNonPlayingHomePlayers}
-          setPlayingAwayPlayers={setPlayingAwayPlayers}
-          setNonPlayingAwayPlayers={setNonPlayingAwayPlayers}
         />
       </div>
 
@@ -97,7 +111,7 @@ const SelectPlayersModal = ({
             setNonPlayingAwayPlayers,
             setNonPlayingHomePlayers,
             setSelectedHomeTeam,
-            setSelectedAwayTeam
+            setSelectedAwayTeam,
           );
         }}
       >

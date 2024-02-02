@@ -1,5 +1,10 @@
 import { useNavigate } from "react-router-dom";
 
+/**
+ * This component is responsible for rendering the error page
+ * on any occuring critical errors.
+ * @returns
+ */
 const ErrorPage = () => {
   const navigate = useNavigate();
 

@@ -1,0 +1,25 @@
+.game {
+    width: 90%;
+    margin: 10px 0;
+    border: 1px solid black;
+    border-radius: 10px;
+    text-align: center;
+    transition: background-color 0.5s;
+
+    display: flex;
+    align-items: center;
+}
+
+.game:hover {
+    cursor: pointer;
+    background-color: antiquewhite;
+    transition: background-color 0.5s;
+}
+
+.game div {
+    width: 20%;
+}
+
+.game div img {
+    width: 40%;
+}

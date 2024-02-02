@@ -55,6 +55,7 @@ const RinkImageHeader = ({ home, away, timeData, globals }) => {
                 away.awayTurnovers,
                 timeData.initialDate,
                 globals.clickCoordinates,
+                globals.imageTop,
                 globals.onFinalisedGame
               )
             }

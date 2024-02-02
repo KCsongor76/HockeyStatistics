@@ -1,3 +1,9 @@
+/**
+ * This component is for one select type input (is used in StartForm).
+ * types: championship, gametype, hometeam, awayteam
+ * @param {*} param0
+ * @returns
+ */
 const DynamicSelectComponent = ({
   type,
   onChange,

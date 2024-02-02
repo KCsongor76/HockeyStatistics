@@ -3,10 +3,12 @@
     width: 100%;
 }
 
-.container > div {
-    width: 75%;
+.container>button {
+    width: 100%;
 }
 
-.container > button {
-    width: 25%;
+.container div img {
+    cursor: pointer;
+    width: 800px;
+    height: 500px;
 }

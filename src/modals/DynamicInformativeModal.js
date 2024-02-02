@@ -2,6 +2,12 @@ import Modal from "react-modal";
 
 Modal.setAppElement("#root"); // Required for accessibility
 
+/**
+ * This is a dynamic modal, which outputs only informative modals
+ * (it's only function is to show messages/data to the user, not to change anything)
+ * @param {*} param0
+ * @returns
+ */
 const DynamicInformativeModal = ({ isOpen, onRequestClose, iconData }) => {
   return (
     <Modal

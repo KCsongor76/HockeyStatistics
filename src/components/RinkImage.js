@@ -12,6 +12,12 @@ import {
 import RinkImageHeader from "./RinkImageHeader";
 import RinkImageAction from "./RinkImageAction";
 
+/**
+ * This component is responsible for rendering the
+ * main action page, and handling all the actions.
+ * @param {*} param0
+ * @returns
+ */
 const RinkImage = ({
   championship,
   gameType,
@@ -29,7 +35,7 @@ const RinkImage = ({
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [gameModalIsOpen, setGameModalIsOpen] = useState(false);
 
-  const [time, setTime] = useState(3); // TODO: back to 20*60
+  const [time, setTime] = useState(1); // TODO: back to 20*60
   const [isRunning, setIsRunning] = useState(false);
   const [period, setPeriod] = useState(1);
   const [periodCounter, setPeriodCounter] = useState(1);
@@ -52,6 +58,8 @@ const RinkImage = ({
   const [homeTurnovers, setHomeTurnovers] = useState(0);
   const [awayTurnovers, setAwayTurnovers] = useState(0);
 
+  const [imageTop, setImageTop] = useState();
+
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Months are zero-based
@@ -63,7 +71,7 @@ const RinkImage = ({
   useEffect(() => {
     /* 
     TODO: when additional button shows up, dont move the page
-    eg. "Go to next period button show up under the "Start/Stop time" button,
+    eg. "Go to next period" button shows up under the "Start/Stop time" button,
     and it pushes down rink image
     solution: styling?
 
@@ -108,8 +116,6 @@ const RinkImage = ({
     period,
   ]);
 
-  console.log(selectedHomeTeam);
-
   const rinkImageHeaderProps = {
     home: {
       homeColors: homeColors,
@@ -150,6 +156,7 @@ const RinkImage = ({
       finaliseGameHandler: finaliseGameHandler,
       logos: logos,
       setLogos: setLogos,
+      imageTop: imageTop,
     },
   };
 
@@ -195,31 +202,11 @@ const RinkImage = ({
       />
 
       <RinkImageAction
-        homeColors={homeColors}
-        awayColors={awayColors}
-        selectedHomeTeam={selectedHomeTeam}
-        selectedAwayTeam={selectedAwayTeam}
-        modalIsOpen={modalIsOpen}
-        setModalIsOpen={setModalIsOpen}
-        gameModalIsOpen={gameModalIsOpen}
-        setGameModalIsOpen={setGameModalIsOpen}
-        singleCoords={singleCoords}
-        setSingleCoords={setSingleCoords}
-        clickCoordinates={clickCoordinates}
-        setClickCoordinates={setClickCoordinates}
-        selectedImage={selectedImage}
-        period={period}
-        time={time}
-        iconData={iconData}
-        setIconData={setIconData}
-        pageSide={pageSide}
-        setPageSide={setPageSide}
-        switchPageHandler={switchPageHandler}
-        clickHandler={clickHandler}
-        /*teams={rinkImageActionProps.teams}
+        teams={rinkImageActionProps.teams}
         modals={rinkImageActionProps.modals}
         coords={rinkImageActionProps.coords}
-        globals={rinkImageActionProps.globals}*/
+        globals={rinkImageActionProps.globals}
+        getImageTop={setImageTop}
       />
     </>
   );

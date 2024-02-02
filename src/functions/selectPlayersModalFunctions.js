@@ -26,7 +26,7 @@ export const resetHandler = (
   setNonPlayingAwayPlayers,
   setNonPlayingHomePlayers,
   setSelectedHomeTeam,
-  setSelectedAwayTeam,
+  setSelectedAwayTeam
 ) => {
   setPlayingHomePlayers(allHomePlayers);
   setPlayingAwayPlayers(allAwayPlayers);

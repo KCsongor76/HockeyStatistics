@@ -1,44 +1,73 @@
 import IconModal from "../modals/IconModal";
 import Icon from "./Icon";
-import classes from "./RinkImage.module.css";
+import classes from "./RinkImageAction.module.css";
 import DynamicInformativeModal from "../modals/DynamicInformativeModal";
+import { useEffect, useRef, useState } from "react";
 
-const RinkImageAction = ({
-  homeColors,
-  awayColors,
-  selectedHomeTeam,
-  selectedAwayTeam,
-  selectedImage,
-  clickHandler,
-  setModalIsOpen,
-  setSingleCoords,
-  modalIsOpen,
-  setClickCoordinates,
-  singleCoords,
-  period,
-  time,
-  gameModalIsOpen,
-  setGameModalIsOpen,
-  iconData,
-  pageSide,
-  clickCoordinates,
-  setIconData,
-  switchPageHandler,
-  setPageSide,
-}) => {
+/**
+ * This component is responsible for rendering
+ * the action rink page and handling all actions
+ * @param {*} param0
+ * @returns
+ */
+const RinkImageAction = ({ teams, modals, coords, globals, getImageTop }) => {
+  const { homeColors, awayColors, selectedHomeTeam, selectedAwayTeam } = teams;
+
+  const { modalIsOpen, setModalIsOpen, gameModalIsOpen, setGameModalIsOpen } =
+    modals;
+
+  const {
+    singleCoords,
+    setSingleCoords,
+    clickCoordinates,
+    setClickCoordinates,
+  } = coords;
+
+  const {
+    selectedImage,
+    period,
+    time,
+    iconData,
+    setIconData,
+    pageSide,
+    setPageSide,
+    switchPageHandler,
+    clickHandler,
+  } = globals;
+
+  const imageRef = useRef(null);
+  const [imageTop, setImageTop] = useState(0);
+
+  useEffect(() => {
+    const updateImagePosition = () => {
+      const imageRect = imageRef.current.getBoundingClientRect();
+      setImageTop(imageRect.top + window.scrollY);
+    };
+
+    // Update position when the component mounts and on resize/scroll
+    window.addEventListener("resize", updateImagePosition);
+    window.addEventListener("scroll", updateImagePosition);
+    updateImagePosition();
+
+    getImageTop(imageTop);
+
+    // Clean up event listeners on component unmount
+    return () => {
+      window.removeEventListener("resize", updateImagePosition);
+      window.removeEventListener("scroll", updateImagePosition);
+    };
+  }, [imageTop, getImageTop]);
+
   return (
     <div className={classes.container}>
       <div>
         <img
+          ref={imageRef}
           src={selectedImage}
           alt="Ice Rink"
           onClick={(event) =>
             clickHandler(event, setModalIsOpen, setSingleCoords)
           }
-          style={{
-            cursor: "pointer",
-            width: "100%",
-          }}
         />
         <IconModal
           isOpen={modalIsOpen}

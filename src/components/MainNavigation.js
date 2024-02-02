@@ -1,6 +1,10 @@
 import { NavLink } from "react-router-dom";
 import classes from "./MainNavigation.module.css";
 
+/**
+ * This component is responsible for rendering the menu.
+ * @returns 
+ */
 const MainNavigation = () => {
   return (
     <nav className={classes.container}>

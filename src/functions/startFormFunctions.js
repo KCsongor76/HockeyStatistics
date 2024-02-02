@@ -70,6 +70,7 @@ const teamB = {
 
 export const teamsROM = [team1, team2];
 export const teamsEUHL = [teamA, teamB];
+export const championships = ["romanian", "euhl"];
 
 export const selectTeamHandler = (
   event,
