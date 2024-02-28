@@ -3,7 +3,7 @@ import classes from "./MainNavigation.module.css";
 
 /**
  * This component is responsible for rendering the menu.
- * @returns 
+ * @returns
  */
 const MainNavigation = () => {
   return (
@@ -31,6 +31,22 @@ const MainNavigation = () => {
             style={({ isActive }) => ({ color: isActive ? "green" : "white" })}
           >
             Previous Games
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="create-team"
+            style={({ isActive }) => ({ color: isActive ? "green" : "white" })}
+          >
+            Create Team
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="create-player"
+            style={({ isActive }) => ({ color: isActive ? "green" : "white" })}
+          >
+            Create Player
           </NavLink>
         </li>
       </ul>

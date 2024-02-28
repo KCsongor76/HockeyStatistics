@@ -10,6 +10,9 @@ import GameDetailPage from "./pages/GameDetailPage";
 import { useState } from "react";
 
 import { gameDataHandler } from "./functions/appFunctions";
+import Auth from "./components/Auth";
+import CreateTeamPage from "./pages/CreateTeamPage";
+import CreatePlayerPage from "./pages/CreatePlayerPage";
 
 /**
  * This component is responsible for the whole project,
@@ -18,8 +21,21 @@ import { gameDataHandler } from "./functions/appFunctions";
  */
 function App() {
   const [prevGames, setPrevGames] = useState([]);
+  const [isSignedIn, setIsSignedIn] = useState(false);
 
-  const router = createBrowserRouter([
+  const handleSignIn = () => {
+    setIsSignedIn(true);
+  };
+
+  const signedOutRoutes = [
+    {
+      path: "/",
+      element: <Auth onSignIn={handleSignIn} />,
+      errorElement: <ErrorPage />,
+    },
+  ];
+
+  const signedInRoutes = [
     {
       path: "/",
       element: <RootLayout />,
@@ -38,9 +54,16 @@ function App() {
         },
         { path: "games", element: <PrevGamesPage prevGamesData={prevGames} /> }, // sending down the data to previous games page
         { path: "games/:gameId", element: <GameDetailPage /> },
+        { path: "create-team", element: <CreateTeamPage /> },
+        { path: "create-player", element: <CreatePlayerPage /> },
       ],
     },
-  ]);
+  ];
+
+  const router = createBrowserRouter(
+    signedInRoutes
+    //isSignedIn ? signedInRoutes : signedOutRoutes
+  );
 
   return <RouterProvider router={router} />;
 }

@@ -14,6 +14,9 @@ import {
 const PrevGamesPage = () => {
   // getting the previous games' data (array) from localStorage
   const prevGamesData = JSON.parse(localStorage.getItem("games"));
+  if (prevGamesData.length === 0) {
+    prevGamesData = [];
+  }
   const allTeams = [...teamsROM, ...teamsEUHL];
 
   /*// Retrieve the cookie value and parse it
@@ -44,6 +47,7 @@ const PrevGamesPage = () => {
     setFilter((prevFilter) => ({ ...prevFilter, [name]: value }));
   };
 
+  // TODO: no prevGamesData -> filter error
   const filteredGames = prevGamesData.filter((prevGame) => {
     const homeTeamMatch =
       filter.selectedHomeTeam === "" ||

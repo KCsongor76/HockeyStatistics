@@ -26,7 +26,11 @@ import SelectPlayersModal from "../modals/SelectPlayersModal";
  * @param {*} param0
  * @returns
  */
-const StartForm = ({ onFormSubmit }) => {
+const StartForm = ({ onFormSubmit, teams }) => {
+  const [teamsROM, setTeamsROM] = useState(teams.romTeams);
+  const [teamsEUHL, setTeamsEUHL] = useState(teams.euhlTeams);
+  const [allTeams, setAllTeams] = useState(teams.allTeams);
+
   const [championship, setChampionship] = useState("romanian");
   const [gameType, setGameType] = useState("regular");
   const [selectedImage, setSelectedImage] = useState(rink_up);
@@ -37,7 +41,6 @@ const StartForm = ({ onFormSubmit }) => {
   const [homeColors, setHomeColors] = useState(defaultIconColors);
   const [awayColors, setAwayColors] = useState(defaultIconColors);
 
-  const [allTeams, setAllTeams] = useState(teamsROM);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const navigate = useNavigate();

@@ -1,11 +1,13 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import RinkImage from "../components/RinkImage";
 import StartForm from "../components/StartForm";
 
 import { formSubmitHandler } from "../functions/startGamePageFunctions";
 import DynamicInformativeModal from "../modals/DynamicInformativeModal";
+
+import { db } from "../firebase-config";
+import { collection, getDocs } from "@firebase/firestore";
 
 /**
  * This component is responsible for the "Start Game" page,
@@ -18,8 +20,48 @@ const StartGamePage = ({ onFinalisedGame }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [gameData, setGameData] = useState({});
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [teamsLoaded, setTeamsLoaded] = useState(false);
 
-  console.log(gameData);
+  const [teams, setTeams] = useState({
+    allTeams: {},
+    euhlTeams: {},
+    romTeams: {},
+  });
+
+  useEffect(() => {
+    const fetchTeamsData = async () => {
+      const teamsCollection = collection(db, "teams");
+      try {
+        const data = await getDocs(teamsCollection);
+        const allTeamsData = [];
+        const romTeamsData = [];
+        const euhlTeamsData = [];
+
+        data.forEach((doc) => {
+          const team = doc.data();
+          team.championships.forEach((championship) => {
+            if (championship === "euhl") {
+              euhlTeamsData.push(team);
+            } else if (championship === "romanian") {
+              romTeamsData.push(team);
+            }
+          });
+
+          allTeamsData.push(team);
+        });
+
+        setTeams({
+          allTeams: allTeamsData,
+          euhlTeams: euhlTeamsData,
+          romTeams: romTeamsData,
+        });
+        setTeamsLoaded(true);
+      } catch (error) {
+        console.error("Error fetching teams: ", error);
+      }
+    };
+    fetchTeamsData();
+  }, []);
 
   return (
     <>
@@ -28,18 +70,22 @@ const StartGamePage = ({ onFinalisedGame }) => {
         onRequestClose={() => setModalIsOpen(false)}
       />
 
-      {!isSubmitted && (
-        <StartForm
-          onFormSubmit={(gameData) =>
-            formSubmitHandler(
-              gameData,
-              setGameData,
-              setIsSubmitted,
-              setModalIsOpen
-            )
-          }
-        />
-      )}
+      {
+        // TODO: loading icon?
+        teamsLoaded && !isSubmitted && (
+          <StartForm
+            onFormSubmit={(gameData) =>
+              formSubmitHandler(
+                gameData,
+                setGameData,
+                setIsSubmitted,
+                setModalIsOpen
+              )
+            }
+            teams={teams}
+          />
+        )
+      }
 
       {isSubmitted && (
         <RinkImage

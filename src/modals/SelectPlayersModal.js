@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 
 import classes from "./SelectPlayersModal.module.css";
@@ -26,6 +26,7 @@ const SelectPlayersModal = ({
   allAwayPlayers,
   onChange,
 }) => {
+  // TODO: need to click done to set playingplayers
   const [playingHomePlayers, setPlayingHomePlayers] = useState(allHomePlayers);
   const [playingAwayPlayers, setPlayingAwayPlayers] = useState(allAwayPlayers);
 
@@ -61,6 +62,14 @@ const SelectPlayersModal = ({
     playingPlayers: playingAwayPlayers,
     nonPlayingPlayers: nonPlayingAwayPlayers,
   };
+
+  useEffect(() => {
+    setPlayingHomePlayers(allHomePlayers);
+  }, [allHomePlayers]);
+
+  useEffect(() => {
+    setPlayingAwayPlayers(allAwayPlayers);
+  }, [allAwayPlayers]);
 
   return (
     <Modal
@@ -111,7 +120,7 @@ const SelectPlayersModal = ({
             setNonPlayingAwayPlayers,
             setNonPlayingHomePlayers,
             setSelectedHomeTeam,
-            setSelectedAwayTeam,
+            setSelectedAwayTeam
           );
         }}
       >

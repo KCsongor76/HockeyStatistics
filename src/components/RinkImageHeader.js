@@ -1,8 +1,16 @@
 import classes from "./RinkImageHeader.module.css";
 
 import { formatTime } from "../functions/rinkImageFunctions";
+import { db } from "../firebase-config";
+import { collection, addDoc } from "@firebase/firestore";
 
 const RinkImageHeader = ({ home, away, timeData, globals }) => {
+  const gamesCollection = collection(db, "games");
+
+  const finaliseGameSendData = async (gameData) => {
+    await addDoc(gamesCollection, gameData);
+  };
+
   return (
     <div className={classes.logosTimers}>
       <div className={classes.logo}>
@@ -38,7 +46,7 @@ const RinkImageHeader = ({ home, away, timeData, globals }) => {
         </button>
         {timeData.isGameOver && (
           <button
-            onClick={() =>
+            onClick={() => {
               globals.finaliseGameHandler(
                 globals.championship,
                 globals.selectedImage,
@@ -57,8 +65,28 @@ const RinkImageHeader = ({ home, away, timeData, globals }) => {
                 globals.clickCoordinates,
                 globals.imageTop,
                 globals.onFinalisedGame
-              )
-            }
+              );
+              const gameData = {
+                championship: globals.championship,
+                selectedImage: globals.selectedImage,
+                gameType: globals.gameType,
+                homeColors: home.homeColors,
+                awayColors: away.awayColors,
+                selectedHomeTeam: home.selectedHomeTeam,
+                selectedAwayTeam: away.selectedAwayTeam,
+                homeGoals: home.homeGoals,
+                awayGoals: away.awayGoals,
+                homeShots: home.homeShots,
+                awayShots: away.awayShots,
+                homeTurnovers: home.homeTurnovers,
+                awayTurnovers: away.awayTurnovers,
+                initialDate: timeData.initialDate,
+                clickCoordinates: globals.clickCoordinates,
+                imageTop: globals.imageTop,
+                //onFinalisedGame: globals.onFinalisedGame,
+              };
+              finaliseGameSendData(gameData);
+            }}
           >
             Finalise Game
           </button>
