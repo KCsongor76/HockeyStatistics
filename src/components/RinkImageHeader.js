@@ -2,13 +2,47 @@ import classes from "./RinkImageHeader.module.css";
 
 import { formatTime } from "../functions/rinkImageFunctions";
 import { db } from "../firebase-config";
-import { collection, addDoc } from "@firebase/firestore";
+import { collection, addDoc, getDocs } from "@firebase/firestore";
 
 const RinkImageHeader = ({ home, away, timeData, globals }) => {
   const gamesCollection = collection(db, "games");
 
   const finaliseGameSendData = async (gameData) => {
     await addDoc(gamesCollection, gameData);
+    console.log("Game data added successfully:", gameData);
+  };
+
+  const handleClick = async () => {
+    let gameIndex = null;
+    try {
+      const data = await getDocs(collection(db, "games"));
+      gameIndex = data.size;
+      console.log("Next game index:", gameIndex);
+
+      const gameData = {
+        championship: globals.championship,
+        selectedImage: globals.selectedImage,
+        gameType: globals.gameType,
+        homeColors: home.homeColors,
+        awayColors: away.awayColors,
+        selectedHomeTeam: home.selectedHomeTeam,
+        selectedAwayTeam: away.selectedAwayTeam,
+        homeGoals: home.homeGoals,
+        awayGoals: away.awayGoals,
+        homeShots: home.homeShots,
+        awayShots: away.awayShots,
+        homeTurnovers: home.homeTurnovers,
+        awayTurnovers: away.awayTurnovers,
+        initialDate: timeData.initialDate,
+        clickCoordinates: globals.clickCoordinates,
+        imageTop: globals.imageTop,
+        gameIndex: gameIndex,
+      };
+
+      await finaliseGameSendData(gameData);
+    } catch (error) {
+      console.error("Error finalizing game:", error);
+    }
   };
 
   return (
@@ -45,51 +79,7 @@ const RinkImageHeader = ({ home, away, timeData, globals }) => {
           {timeData.isRunning ? "Stop time" : "Start time"}
         </button>
         {timeData.isGameOver && (
-          <button
-            onClick={() => {
-              globals.finaliseGameHandler(
-                globals.championship,
-                globals.selectedImage,
-                globals.gameType,
-                home.homeColors,
-                away.awayColors,
-                home.selectedHomeTeam,
-                away.selectedAwayTeam,
-                home.homeGoals,
-                away.awayGoals,
-                home.homeShots,
-                away.awayShots,
-                home.homeTurnovers,
-                away.awayTurnovers,
-                timeData.initialDate,
-                globals.clickCoordinates,
-                globals.imageTop,
-                globals.onFinalisedGame
-              );
-              const gameData = {
-                championship: globals.championship,
-                selectedImage: globals.selectedImage,
-                gameType: globals.gameType,
-                homeColors: home.homeColors,
-                awayColors: away.awayColors,
-                selectedHomeTeam: home.selectedHomeTeam,
-                selectedAwayTeam: away.selectedAwayTeam,
-                homeGoals: home.homeGoals,
-                awayGoals: away.awayGoals,
-                homeShots: home.homeShots,
-                awayShots: away.awayShots,
-                homeTurnovers: home.homeTurnovers,
-                awayTurnovers: away.awayTurnovers,
-                initialDate: timeData.initialDate,
-                clickCoordinates: globals.clickCoordinates,
-                imageTop: globals.imageTop,
-                //onFinalisedGame: globals.onFinalisedGame,
-              };
-              finaliseGameSendData(gameData);
-            }}
-          >
-            Finalise Game
-          </button>
+          <button onClick={handleClick}>Finalise Game</button>
         )}
         {timeData.isEndOfPeriod && (
           <button

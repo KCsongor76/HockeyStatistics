@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import FilterForm from "./FilterForm";
-import PlayerDataForm from "./PlayerDataForm";
+// import PlayerDataForm from "./PlayerDataForm";
 
 import classes from "./TeamActionDetails.module.css";
 import PlayersTable from "./PlayersTable";
@@ -29,9 +29,11 @@ const TeamActionDetails = ({ gameData, home }) => {
 
   const handleRowSelect = (player) => {
     // Display associated actions based on the selected player
+    console.log(player);
     const playerActions = gameData.clickCoordinates.filter(
       (coord) => coord.player.jerseyNr === player.jerseyNr
     );
+    console.log(playerActions);
     setSelectedPlayer({ ...player, actions: playerActions }); // array of its action objects: shot/goal/turnovers
   };
 
@@ -39,11 +41,8 @@ const TeamActionDetails = ({ gameData, home }) => {
     // Sort players based on the selected field and order
     const sortedPlayers = [...filteredPlayers].sort((a, b) => {
       if (order === "asc") {
-        console.log(field);
-        //console.log("field", a[field], b[field]);
         return a[field] > b[field] ? 1 : -1;
       } else {
-        console.log(field);
         return a[field] < b[field] ? 1 : -1;
       }
     });

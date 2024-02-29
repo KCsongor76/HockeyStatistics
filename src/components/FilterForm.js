@@ -28,7 +28,7 @@ const FilterForm = ({ gameData, home, imageTop }) => {
     return false;
   });
 
-  console.log("top:", imageTop);
+  //console.log("top:", imageTop);
 
   const handleCheckboxChange = (checkboxName) => {
     switch (checkboxName) {

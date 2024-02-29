@@ -16,7 +16,7 @@ import { collection, getDocs } from "@firebase/firestore";
  * @param {} param0
  * @returns
  */
-const StartGamePage = ({ onFinalisedGame }) => {
+const StartGamePage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [gameData, setGameData] = useState({});
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -96,7 +96,6 @@ const StartGamePage = ({ onFinalisedGame }) => {
           selectedAwayTeam={gameData.selectedAwayTeam}
           homeColors={gameData.homeColors}
           awayColors={gameData.awayColors}
-          onFinalisedGame={(coordData) => onFinalisedGame(coordData)} // sends the coordData up to the App
         />
       )}
     </>

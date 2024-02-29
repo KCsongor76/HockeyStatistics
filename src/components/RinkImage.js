@@ -26,7 +26,6 @@ const RinkImage = ({
   selectedAwayTeam,
   homeColors,
   awayColors,
-  onFinalisedGame,
 }) => {
   const [clickCoordinates, setClickCoordinates] = useState([]);
   const [pageSide, setPageSide] = useState("left");
@@ -151,7 +150,6 @@ const RinkImage = ({
       selectedImage: selectedImage,
       gameType: gameType,
       clickCoordinates: clickCoordinates,
-      onFinalisedGame: onFinalisedGame,
       teamIconSwitchHandler: teamIconSwitchHandler,
       finaliseGameHandler: finaliseGameHandler,
       logos: logos,

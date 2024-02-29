@@ -9,7 +9,6 @@ import PrevGamesPage from "./pages/PrevGamesPage";
 import GameDetailPage from "./pages/GameDetailPage";
 import { useState } from "react";
 
-import { gameDataHandler } from "./functions/appFunctions";
 import Auth from "./components/Auth";
 import CreateTeamPage from "./pages/CreateTeamPage";
 import CreatePlayerPage from "./pages/CreatePlayerPage";
@@ -20,8 +19,7 @@ import CreatePlayerPage from "./pages/CreatePlayerPage";
  * @returns
  */
 function App() {
-  const [prevGames, setPrevGames] = useState([]);
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  /*const [isSignedIn, setIsSignedIn] = useState(false);
 
   const handleSignIn = () => {
     setIsSignedIn(true);
@@ -33,7 +31,7 @@ function App() {
       element: <Auth onSignIn={handleSignIn} />,
       errorElement: <ErrorPage />,
     },
-  ];
+  ];*/
 
   const signedInRoutes = [
     {
@@ -42,17 +40,8 @@ function App() {
       errorElement: <ErrorPage />,
       children: [
         { index: true, element: <HomePage /> },
-        {
-          path: "start",
-          element: (
-            <StartGamePage
-              onFinalisedGame={(data) =>
-                gameDataHandler(prevGames, setPrevGames, data)
-              }
-            />
-          ), // getting the data from the game page
-        },
-        { path: "games", element: <PrevGamesPage prevGamesData={prevGames} /> }, // sending down the data to previous games page
+        { path: "start", element: <StartGamePage /> },
+        { path: "games", element: <PrevGamesPage /> },
         { path: "games/:gameId", element: <GameDetailPage /> },
         { path: "create-team", element: <CreateTeamPage /> },
         { path: "create-player", element: <CreatePlayerPage /> },

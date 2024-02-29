@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import PrevGame from "../components/PrevGame";
@@ -6,28 +6,53 @@ import PrevGame from "../components/PrevGame";
 import classes from "./PrevGamesPage.module.css";
 
 import {
-  teamsROM,
-  teamsEUHL,
   championships,
 } from "../functions/startFormFunctions";
 
+import { db } from "../firebase-config";
+import { collection, getDocs } from "@firebase/firestore";
+
 const PrevGamesPage = () => {
-  // getting the previous games' data (array) from localStorage
-  const prevGamesData = JSON.parse(localStorage.getItem("games"));
-  if (prevGamesData.length === 0) {
-    prevGamesData = [];
-  }
-  const allTeams = [...teamsROM, ...teamsEUHL];
+  const [allTeams, setAllTeams] = useState([]);
+  const [prevGamesData, setPrevGamesData] = useState([]);
 
-  /*// Retrieve the cookie value and parse it
-  const prevGamesCookie = document.cookie
-    .split("; ")
-    .find((cookie) => cookie.startsWith("games="));
+  useEffect(() => {
+    const fetchTeamsData = async () => {
+      const teamsCollection = collection(db, "teams");
+      try {
+        const data = await getDocs(teamsCollection);
+        const allTeamsData = [];
 
-  const prevGamesData = prevGamesCookie
-    ? JSON.parse(prevGamesCookie.split("=")[1])
-    : [];
-  */
+        data.forEach((doc) => {
+          const team = doc.data();
+          allTeamsData.push(team);
+        });
+
+        setAllTeams(allTeamsData);
+      } catch (error) {
+        console.error("Error fetching teams: ", error);
+      }
+    };
+
+    const fetchPrevGamesData = async () => {
+      try {
+        const gamesCollection = collection(db, "games");
+        const data = await getDocs(gamesCollection);
+        const allGamesData = [];
+
+        data.forEach((doc) => {
+          const game = doc.data();
+          allGamesData.push(game);
+        });
+
+        setPrevGamesData(allGamesData);
+      } catch (error) {
+        console.error("Error fetching previous games: ", error);
+      }
+    };
+    fetchTeamsData();
+    fetchPrevGamesData();
+  }, []);
 
   const navigate = useNavigate();
 
@@ -47,22 +72,24 @@ const PrevGamesPage = () => {
     setFilter((prevFilter) => ({ ...prevFilter, [name]: value }));
   };
 
-  // TODO: no prevGamesData -> filter error
-  const filteredGames = prevGamesData.filter((prevGame) => {
-    const homeTeamMatch =
-      filter.selectedHomeTeam === "" ||
-      prevGame.selectedHomeTeam.name === filter.selectedHomeTeam;
+  const condition = prevGamesData.length >= 0;
+  const filteredGames = condition
+    ? prevGamesData.filter((prevGame) => {
+        const homeTeamMatch =
+          filter.selectedHomeTeam === "" ||
+          prevGame.selectedHomeTeam.name === filter.selectedHomeTeam;
 
-    const awayTeamMatch =
-      filter.selectedAwayTeam === "" ||
-      prevGame.selectedAwayTeam.name === filter.selectedAwayTeam;
+        const awayTeamMatch =
+          filter.selectedAwayTeam === "" ||
+          prevGame.selectedAwayTeam.name === filter.selectedAwayTeam;
 
-    const championshipMatch =
-      filter.selectedChampionship === "" ||
-      prevGame.championship === filter.selectedChampionship;
+        const championshipMatch =
+          filter.selectedChampionship === "" ||
+          prevGame.championship === filter.selectedChampionship;
 
-    return homeTeamMatch && awayTeamMatch && championshipMatch;
-  });
+        return homeTeamMatch && awayTeamMatch && championshipMatch;
+      })
+    : [];
 
   return (
     <>
@@ -121,11 +148,11 @@ const PrevGamesPage = () => {
 
       <div className={classes.container}>
         {filteredGames.length > 0 ? (
-          filteredGames.map((prevGame) => (
+          filteredGames.map((prevGame, index) => (
             <PrevGame
-              key={prevGame.gameIndex}
+              key={index}
               prevGame={prevGame}
-              navigateHandler={navigateHandler}
+              navigateHandler={() => navigateHandler(index)}
             />
           ))
         ) : (

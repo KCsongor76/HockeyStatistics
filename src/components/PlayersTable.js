@@ -18,7 +18,27 @@ const PlayersTable = ({
     onSort(field, sortOrder);
   };
 
-  console.log(players);
+  const playersWithActions = players.map((player) => {
+    const playerActions = clickCoordinates.filter(
+      (coord) => coord.player.jerseyNr === player.jerseyNr
+    );
+
+    let goal = 0;
+    let shot = 0;
+    let turnover = 0;
+
+    playerActions.forEach((action) => {
+      if (action.type === "goal") {
+        goal++;
+      } else if (action.type === "shot") {
+        shot++;
+      } else if (action.type === "turnover") {
+        turnover++;
+      }
+    });
+
+    return { ...player, goal: goal, shot: shot, turnover: turnover };
+  });
 
   return (
     <table className={classes.tableContainer}>
@@ -63,7 +83,7 @@ const PlayersTable = ({
         </tr>
       </thead>
       <tbody>
-        {players.map((player) => (
+        {playersWithActions.map((player) => (
           <tr key={player.jerseyNr} onClick={() => onRowSelect(player)}>
             <td>{player.jerseyNr}</td>
             <td>{player.position}</td>
