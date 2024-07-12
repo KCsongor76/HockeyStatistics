@@ -1,60 +1,62 @@
-import { useState } from "react";
-import {
-  createUserWithEmailAndPassword,
-  signInWithPopup,
-  GoogleAuthProvider,
-} from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase-config"; // Assuming you have initialized Firebase Authentication
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import classes from "./Auth.module.css";
 
 function Auth({ onSignIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSignUp = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      // Signed up successfully
-      console.log("User signed up:", userCredential.user);
+      await signInWithEmailAndPassword(auth, email, password);
+      onSignIn(true);
+      navigate("/");
     } catch (error) {
-      console.error("Error signing up:", error.message);
+      setError("Invalid email or password");
     }
   };
 
-  const handleSignInWithGoogle = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      // Signed in with Google successfully
-      console.log("User signed in with Google:", result.user);
-      onSignIn();
-    } catch (error) {
-      console.error("Error signing in with Google:", error.message);
-    }
-  };
+  const navigate = useNavigate();
 
   return (
-    <div>
-      <h2>Sign Up</h2>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleSignUp}>Sign Up</button>
-
-      <h2>Sign In with Google</h2>
-      <button onClick={handleSignInWithGoogle}>Sign In with Google</button>
+    <div className={classes.container}>
+      <h2 className={classes.heading}>Admin Login</h2>
+      <form onSubmit={handleLogin}>
+        <div className={classes.formGroup}>
+          <label className={classes.label}>Email:</label>
+          <input
+            className={classes.input}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className={classes.formGroup}>
+          <label className={classes.label}>Password:</label>
+          <input
+            className={classes.input}
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button className={classes.button} type="submit">
+          Login
+        </button>
+        {error && (
+          <p className={classes.error} style={{ color: "red" }}>
+            {error}
+          </p>
+        )}
+      </form>
     </div>
   );
 }

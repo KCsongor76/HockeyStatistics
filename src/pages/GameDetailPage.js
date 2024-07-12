@@ -11,25 +11,24 @@ const GameDetailPage = () => {
   const [home, setHome] = useState(true);
   const [isFetched, setIsFetched] = useState(false);
 
+  const fetchPrevGamesData = async () => {
+    try {
+      const gamesCollection = collection(db, "games");
+      const data = await getDocs(gamesCollection);
+      const allGamesData = [];
+
+      data.forEach((doc) => {
+        const game = doc.data();
+        allGamesData.push(game);
+      });
+
+      setPrevGamesData(allGamesData);
+      setIsFetched(true);
+    } catch (error) {
+      console.error("Error fetching previous games: ", error);
+    }
+  };
   useEffect(() => {
-    const fetchPrevGamesData = async () => {
-      try {
-        const gamesCollection = collection(db, "games");
-        const data = await getDocs(gamesCollection);
-        const allGamesData = [];
-
-        data.forEach((doc) => {
-          const game = doc.data();
-          allGamesData.push(game);
-        });
-
-        setPrevGamesData(allGamesData);
-        setIsFetched(true);
-      } catch (error) {
-        console.error("Error fetching previous games: ", error);
-      }
-    };
-
     fetchPrevGamesData();
   }, []);
 

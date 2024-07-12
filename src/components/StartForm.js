@@ -14,11 +14,7 @@ import {
 
 import DynamicSelectComponent from "./FormElements/DynamicSelectComponent";
 
-import {
-  teamsEUHL,
-  teamsROM,
-  defaultIconColors,
-} from "../functions/startFormFunctions";
+import { defaultIconColors } from "../functions/startFormFunctions";
 import SelectPlayersModal from "../modals/SelectPlayersModal";
 
 /**

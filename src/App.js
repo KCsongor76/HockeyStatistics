@@ -10,8 +10,12 @@ import GameDetailPage from "./pages/GameDetailPage";
 import { useState } from "react";
 
 import Auth from "./components/Auth";
-import CreateTeamPage from "./pages/CreateTeamPage";
-import CreatePlayerPage from "./pages/CreatePlayerPage";
+import CreatePlayerPage from "./pages/adminPages/CreatePlayerPage";
+import HandleTeamPage from "./pages/adminPages/HandleTeamPage";
+import TeamCRUDPage from "./pages/adminPages/TeamCRUDPage";
+import CreateTeamPage from "./pages/adminPages/CreateTeamPage";
+import PlayerCRUDPage from "./pages/adminPages/PlayerCRUDPage";
+import TransferPage from "./pages/adminPages/TransferPage";
 
 /**
  * This component is responsible for the whole project,
@@ -19,21 +23,43 @@ import CreatePlayerPage from "./pages/CreatePlayerPage";
  * @returns
  */
 function App() {
-  /*const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(false);
 
   const handleSignIn = () => {
     setIsSignedIn(true);
   };
 
-  const signedOutRoutes = [
+  const signedInAdminRoutes = [
     {
       path: "/",
-      element: <Auth onSignIn={handleSignIn} />,
+      element: <RootLayout isSignedInAdmin={isSignedIn} />,
       errorElement: <ErrorPage />,
+      children: [
+        { index: true, element: <HomePage /> },
+        { path: "start", element: <StartGamePage /> },
+        { path: "games", element: <PrevGamesPage /> },
+        { path: "games/:gameId", element: <GameDetailPage /> },
+        {
+          path: "handleTeams",
+          children: [
+            { index: true, element: <TeamCRUDPage /> },
+            { path: "create", element: <CreateTeamPage /> },
+            { path: ":teamId", element: <HandleTeamPage /> },
+          ],
+        },
+        {
+          path: "handlePlayers",
+          children: [
+            { index: true, element: <PlayerCRUDPage /> },
+            { path: "create", element: <CreatePlayerPage /> },
+            { path: "transfer", element: <TransferPage /> },
+          ],
+        },
+      ],
     },
-  ];*/
+  ];
 
-  const signedInRoutes = [
+  const signedOutRoutes = [
     {
       path: "/",
       element: <RootLayout />,
@@ -43,15 +69,13 @@ function App() {
         { path: "start", element: <StartGamePage /> },
         { path: "games", element: <PrevGamesPage /> },
         { path: "games/:gameId", element: <GameDetailPage /> },
-        { path: "create-team", element: <CreateTeamPage /> },
-        { path: "create-player", element: <CreatePlayerPage /> },
+        { path: "adminLogin", element: <Auth onSignIn={handleSignIn} /> },
       ],
     },
   ];
 
   const router = createBrowserRouter(
-    signedInRoutes
-    //isSignedIn ? signedInRoutes : signedOutRoutes
+    isSignedIn ? signedInAdminRoutes : signedOutRoutes
   );
 
   return <RouterProvider router={router} />;

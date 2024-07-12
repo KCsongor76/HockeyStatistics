@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
-import { db } from "../firebase-config";
-import {
-  collection,
-  getDocs,
-  addDoc,
-  doc,
-  getDoc,
-  updateDoc,
-} from "@firebase/firestore";
+
+import classes from "./CreatePlayerPage.module.css";
+import { createPlayer, getTeamsData } from "../../functions/firebaseFunctions";
+import { useNavigate } from "react-router-dom";
 
 const CreatePlayerPage = () => {
   const [playerData, setPlayerData] = useState({
@@ -18,46 +13,29 @@ const CreatePlayerPage = () => {
 
   const [teams, setTeams] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState("");
-
-  const teamsCollection = collection(db, "teams");
+  const navigate = useNavigate();
 
   const submitHandler = async (event) => {
     event.preventDefault();
     if (
-      playerData.name == "" ||
+      playerData.name === "" ||
       playerData.jerseyNr < 1 ||
       playerData.jerseyNr > 99 ||
-      playerData.position == ""
+      playerData.position === ""
     ) {
       alert("Fill in correct values in all fields");
       return;
     }
     try {
-      const teamRef = doc(db, "teams", selectedTeam);
+      createPlayer(playerData, selectedTeam);
 
-      const teamSnapshot = await getDoc(teamRef);
-      if (teamSnapshot.exists()) {
-        const teamData = teamSnapshot.data();
-        if (teamData.players) {
-          await updateDoc(teamRef, {
-            players: [...teamData.players, playerData],
-          });
-        } else {
-          await updateDoc(teamRef, {
-            players: [playerData],
-          });
-        }
-        alert("Player added successfully!");
-        setPlayerData({
-          name: "",
-          jerseyNr: 0,
-          position: "",
-        });
-        setSelectedTeam("");
-      } else {
-        console.error("Team document does not exist.");
-        alert("Error adding player. Please try again.");
-      }
+      alert("Player added successfully!");
+      setPlayerData({
+        name: "",
+        jerseyNr: 0,
+        position: "",
+      });
+      setSelectedTeam("");
     } catch (error) {
       console.error("Error adding player: ", error);
       alert("Error adding player. Please try again.");
@@ -65,21 +43,16 @@ const CreatePlayerPage = () => {
   };
 
   useEffect(() => {
-    const getTeamsData = async () => {
-      const data = await getDocs(teamsCollection);
-      setTeams(data.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-    };
-
-    getTeamsData();
+    getTeamsData(setTeams);
   }, []);
 
   console.log(teams);
 
   return (
-    <>
-      <h2>Create player</h2>
-      <form onSubmit={submitHandler}>
-        <label>
+    <div className={classes.container}>
+      <h2 className={classes.heading}>Create player</h2>
+      <form onSubmit={submitHandler} className={classes.form}>
+        <label className={classes.label}>
           Name:
           <input
             type="text"
@@ -89,9 +62,10 @@ const CreatePlayerPage = () => {
                 return { ...prevData, name: event.target.value };
               })
             }
+            className={classes.input}
           />
         </label>
-        <label>
+        <label className={classes.label}>
           Jersey Number:
           <input
             type="number"
@@ -101,9 +75,10 @@ const CreatePlayerPage = () => {
                 return { ...prevData, jerseyNr: event.target.value };
               })
             }
+            className={classes.input}
           />
         </label>
-        <label>
+        <label className={classes.label}>
           Position:
           <select
             value={playerData.position}
@@ -112,6 +87,7 @@ const CreatePlayerPage = () => {
                 return { ...prevData, position: event.target.value };
               })
             }
+            className={classes.select}
           >
             <option value="">Select Position</option>
             <option value="F">Forward</option>
@@ -120,11 +96,12 @@ const CreatePlayerPage = () => {
           </select>
         </label>
 
-        <label>
+        <label className={classes.label}>
           Team:
           <select
             value={selectedTeam}
             onChange={(event) => setSelectedTeam(event.target.value)}
+            className={classes.select}
           >
             <option value="">Select Team</option>
             {teams.map((team) => (
@@ -134,9 +111,14 @@ const CreatePlayerPage = () => {
             ))}
           </select>
         </label>
-        <button type="submit">Create Player</button>
+        <button type="submit" className={classes.button}>
+          Create Player
+        </button>
       </form>
-    </>
+      <button className={classes.navButton} onClick={() => navigate(-1)}>
+        Go Back
+      </button>
+    </div>
   );
 };
 

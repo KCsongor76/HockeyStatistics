@@ -5,48 +5,96 @@ import classes from "./MainNavigation.module.css";
  * This component is responsible for rendering the menu.
  * @returns
  */
-const MainNavigation = () => {
-  return (
+const MainNavigation = ({ isSignedInAdmin }) => {
+  const lineStyle = { color: "#007bff", fontWeight: "bold" };
+
+  return isSignedInAdmin ? (
     <nav className={classes.container}>
-      <ul>
+      <ul className={classes.navList}>
         <li>
           <NavLink
             to="/"
-            style={({ isActive }) => ({ color: isActive ? "green" : "white" })}
+            className={classes.navLink}
+            style={({ isActive }) => (isActive ? lineStyle : null)}
           >
             Home
           </NavLink>
         </li>
         <li>
           <NavLink
-            to="start"
-            style={({ isActive }) => ({ color: isActive ? "green" : "white" })}
+            to="/start"
+            className={classes.navLink}
+            style={({ isActive }) => (isActive ? lineStyle : null)}
           >
             Start Game
           </NavLink>
         </li>
         <li>
           <NavLink
-            to="games"
-            style={({ isActive }) => ({ color: isActive ? "green" : "white" })}
+            to="/games"
+            className={classes.navLink}
+            style={({ isActive }) => (isActive ? lineStyle : null)}
           >
             Previous Games
           </NavLink>
         </li>
         <li>
           <NavLink
-            to="create-team"
-            style={({ isActive }) => ({ color: isActive ? "green" : "white" })}
+            to="/handleTeams"
+            className={classes.navLink}
+            style={({ isActive }) => (isActive ? lineStyle : null)}
           >
-            Create Team
+            Teams
           </NavLink>
         </li>
         <li>
           <NavLink
-            to="create-player"
-            style={({ isActive }) => ({ color: isActive ? "green" : "white" })}
+            to="/handlePlayers"
+            className={classes.navLink}
+            style={({ isActive }) => (isActive ? lineStyle : null)}
           >
-            Create Player
+            Players
+          </NavLink>
+        </li>
+      </ul>
+    </nav>
+  ) : (
+    <nav className={classes.container}>
+      <ul className={classes.navList}>
+        <li>
+          <NavLink
+            to="/"
+            className={classes.navLink}
+            style={({ isActive }) => (isActive ? lineStyle : null)}
+          >
+            Home
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/start"
+            className={classes.navLink}
+            style={({ isActive }) => (isActive ? lineStyle : null)}
+          >
+            Start Game
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/games"
+            className={classes.navLink}
+            style={({ isActive }) => (isActive ? lineStyle : null)}
+          >
+            Previous Games
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/adminLogin"
+            className={classes.navLink}
+            style={({ isActive }) => (isActive ? lineStyle : null)}
+          >
+            Admin Login
           </NavLink>
         </li>
       </ul>
