@@ -2,7 +2,14 @@ import classes from "./RinkImageHeader.module.css";
 
 import { formatTime } from "../functions/rinkImageFunctions";
 import { db } from "../firebase-config";
-import { collection, addDoc, getDocs } from "@firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  limit,
+} from "@firebase/firestore";
 
 const RinkImageHeader = ({ home, away, timeData, globals }) => {
   const gamesCollection = collection(db, "games");
@@ -10,13 +17,26 @@ const RinkImageHeader = ({ home, away, timeData, globals }) => {
   const finaliseGameSendData = async (gameData) => {
     await addDoc(gamesCollection, gameData);
     console.log("Game data added successfully:", gameData);
+    alert("Game data added successfully:");
   };
 
+  async function getMaxGameIndex() {
+    const gamesCollection = collection(db, "games");
+    const q = query(gamesCollection, orderBy("gameIndex", "desc"), limit(1));
+
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      return querySnapshot.docs[0].data().gameIndex;
+    } else {
+      // If there are no documents, return -1 (since 0 will be the first index)
+      return -1;
+    }
+  }
+
   const handleClick = async () => {
-    let gameIndex = null;
     try {
-      const data = await getDocs(collection(db, "games"));
-      gameIndex = data.size;
+      const index = await getMaxGameIndex();
+      const gameIndex = index + 1;
       console.log("Next game index:", gameIndex);
 
       const gameData = {
@@ -73,15 +93,17 @@ const RinkImageHeader = ({ home, away, timeData, globals }) => {
         <p>
           Score: {home.homeGoals}:{away.awayGoals}
         </p>
-        <button
-          onClick={() => timeData.setIsRunning((prevRunning) => !prevRunning)}
-        >
-          {timeData.isRunning ? "Stop time" : "Start time"}
-        </button>
+        {!timeData.isGameOver && !timeData.isEndOfPeriod && (
+          <button
+            onClick={() => timeData.setIsRunning((prevRunning) => !prevRunning)}
+          >
+            {timeData.isRunning ? "Stop time" : "Start time"}
+          </button>
+        )}
         {timeData.isGameOver && (
           <button onClick={handleClick}>Finalise Game</button>
         )}
-        {timeData.isEndOfPeriod && (
+        {timeData.isEndOfPeriod && !timeData.isGameOver && (
           <button
             onClick={() =>
               timeData.timeAndPeriodHandler(

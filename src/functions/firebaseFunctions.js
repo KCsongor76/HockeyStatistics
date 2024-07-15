@@ -46,6 +46,38 @@ export const getAllTeams2 = async (setAllTeams) => {
   }
 };
 
+export const fetchTeamsData = async (setTeams, setTeamsLoaded) => {
+  const teamsCollection = collection(db, "teams");
+  try {
+    const data = await getDocs(teamsCollection);
+    const allTeamsData = [];
+    const romTeamsData = [];
+    const euhlTeamsData = [];
+
+    data.forEach((doc) => {
+      const team = doc.data();
+      team.championships.forEach((championship) => {
+        if (championship === "euhl") {
+          euhlTeamsData.push(team);
+        } else if (championship === "romanian") {
+          romTeamsData.push(team);
+        }
+      });
+
+      allTeamsData.push(team);
+    });
+
+    setTeams({
+      allTeams: allTeamsData,
+      euhlTeams: euhlTeamsData,
+      romTeams: romTeamsData,
+    });
+    setTeamsLoaded(true);
+  } catch (error) {
+    console.error("Error fetching teams: ", error);
+  }
+};
+
 export const getTeamsData = async (setTeams) => {
   const data = await getDocs(teamsCollectionRef);
   setTeams(data.docs.map((doc) => ({ id: doc.id, ...doc.data() })));

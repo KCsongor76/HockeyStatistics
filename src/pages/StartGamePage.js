@@ -2,12 +2,9 @@ import { useState, useEffect } from "react";
 
 import RinkImage from "../components/RinkImage";
 import StartForm from "../components/StartForm";
-
-import { formSubmitHandler } from "../functions/startGamePageFunctions";
 import DynamicInformativeModal from "../modals/DynamicInformativeModal";
-
-import { db } from "../firebase-config";
-import { collection, getDocs } from "@firebase/firestore";
+import { formSubmitHandler } from "../functions/startGamePageFunctions";
+import { fetchTeamsData } from "../functions/firebaseFunctions";
 
 /**
  * This component is responsible for the "Start Game" page,
@@ -28,41 +25,31 @@ const StartGamePage = () => {
     romTeams: {},
   });
 
-  const fetchTeamsData = async () => {
-    const teamsCollection = collection(db, "teams");
-    try {
-      const data = await getDocs(teamsCollection);
-      const allTeamsData = [];
-      const romTeamsData = [];
-      const euhlTeamsData = [];
-
-      data.forEach((doc) => {
-        const team = doc.data();
-        team.championships.forEach((championship) => {
-          if (championship === "euhl") {
-            euhlTeamsData.push(team);
-          } else if (championship === "romanian") {
-            romTeamsData.push(team);
-          }
-        });
-
-        allTeamsData.push(team);
-      });
-
-      setTeams({
-        allTeams: allTeamsData,
-        euhlTeams: euhlTeamsData,
-        romTeams: romTeamsData,
-      });
-      setTeamsLoaded(true);
-    } catch (error) {
-      console.error("Error fetching teams: ", error);
+  const updatePlayingPlayers = (team) => {
+    if (!team.playingPlayers || team.playingPlayers.length === 0) {
+      return {
+        ...team,
+        playingPlayers: team.players,
+      };
     }
+    return team;
   };
 
   useEffect(() => {
-    fetchTeamsData();
+    fetchTeamsData(setTeams, setTeamsLoaded);
   }, []);
+
+  // Update gameData to set playingPlayers if they are empty or non-existent
+
+  useEffect(() => {
+    if (isSubmitted) {
+      setGameData((prevData) => ({
+        ...prevData,
+        selectedHomeTeam: updatePlayingPlayers(prevData.selectedHomeTeam),
+        selectedAwayTeam: updatePlayingPlayers(prevData.selectedAwayTeam),
+      }));
+    }
+  }, [isSubmitted]);
 
   return (
     <>
@@ -71,22 +58,19 @@ const StartGamePage = () => {
         onRequestClose={() => setModalIsOpen(false)}
       />
 
-      {
-        // TODO: loading icon?
-        teamsLoaded && !isSubmitted && (
-          <StartForm
-            onFormSubmit={(gameData) =>
-              formSubmitHandler(
-                gameData,
-                setGameData,
-                setIsSubmitted,
-                setModalIsOpen
-              )
-            }
-            teams={teams}
-          />
-        )
-      }
+      {teamsLoaded && !isSubmitted && (
+        <StartForm
+          onFormSubmit={(gameData) =>
+            formSubmitHandler(
+              gameData,
+              setGameData,
+              setIsSubmitted,
+              setModalIsOpen
+            )
+          }
+          teams={teams}
+        />
+      )}
 
       {isSubmitted && (
         <RinkImage

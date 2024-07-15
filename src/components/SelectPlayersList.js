@@ -5,7 +5,13 @@
  * @param {*} param0
  * @returns
  */
-const SelectPlayersList = ({ players, setters, playerHandler, home }) => {
+const SelectPlayersList = ({
+  players,
+  setters,
+  playerHandler,
+  home,
+  color,
+}) => {
   return (
     <div>
       {players.selectedPlayers.length === 0 && <p>No players found</p>}
@@ -15,6 +21,7 @@ const SelectPlayersList = ({ players, setters, playerHandler, home }) => {
             #{player.jerseyNr}: {player.name}
           </p>
           <button
+            style={{ backgroundColor: color, padding: "12px" }}
             value={player.jerseyNr + player.position}
             onClick={(event) =>
               playerHandler(
@@ -28,9 +35,7 @@ const SelectPlayersList = ({ players, setters, playerHandler, home }) => {
                 setters.setNonPlayingAwayPlayers
               )
             }
-          >
-            -
-          </button>
+          />
         </div>
       ))}
     </div>

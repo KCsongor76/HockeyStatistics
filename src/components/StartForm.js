@@ -23,16 +23,14 @@ import SelectPlayersModal from "../modals/SelectPlayersModal";
  * @returns
  */
 const StartForm = ({ onFormSubmit, teams }) => {
-  const [teamsROM, setTeamsROM] = useState(teams.romTeams);
-  const [teamsEUHL, setTeamsEUHL] = useState(teams.euhlTeams);
   const [allTeams, setAllTeams] = useState(teams.allTeams);
 
   const [championship, setChampionship] = useState("romanian");
   const [gameType, setGameType] = useState("regular");
   const [selectedImage, setSelectedImage] = useState(rink_up);
 
-  const [selectedHomeTeam, setSelectedHomeTeam] = useState(teamsROM[0]);
-  const [selectedAwayTeam, setSelectedAwayTeam] = useState(teamsROM[1]);
+  const [selectedHomeTeam, setSelectedHomeTeam] = useState(teams.romTeams[0]);
+  const [selectedAwayTeam, setSelectedAwayTeam] = useState(teams.romTeams[1]);
 
   const [homeColors, setHomeColors] = useState(defaultIconColors);
   const [awayColors, setAwayColors] = useState(defaultIconColors);
@@ -44,17 +42,17 @@ const StartForm = ({ onFormSubmit, teams }) => {
   useEffect(() => {
     // Reset everything when the championship changes
     if (championship === "romanian") {
-      setAllTeams(teamsROM);
-      setSelectedHomeTeam(teamsROM[0]);
-      setSelectedAwayTeam(teamsROM[1]);
+      setAllTeams(teams.romTeams);
+      setSelectedHomeTeam(teams.romTeams[0]);
+      setSelectedAwayTeam(teams.romTeams[1]);
     } else if (championship === "euhl") {
-      setAllTeams(teamsEUHL);
-      setSelectedHomeTeam(teamsEUHL[0]);
-      setSelectedAwayTeam(teamsEUHL[1]);
+      setAllTeams(teams.euhlTeams);
+      setSelectedHomeTeam(teams.euhlTeams[0]);
+      setSelectedAwayTeam(teams.euhlTeams[1]);
     }
     setHomeColors(defaultIconColors);
     setAwayColors(defaultIconColors);
-  }, [championship]);
+  }, [championship, teams.romTeams, teams.euhlTeams]);
 
   useEffect(() => {
     //setHomeColors(defaultIconColors);

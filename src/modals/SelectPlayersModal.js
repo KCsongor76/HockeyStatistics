@@ -85,12 +85,14 @@ const SelectPlayersModal = ({
           setters={setters}
           playerHandler={removePlayerHandler}
           home={true}
+          color="red"
         />
         <SelectPlayersList
           players={players2}
           setters={setters}
           playerHandler={removePlayerHandler}
           home={false}
+          color="red"
         />
       </div>
 
@@ -101,12 +103,14 @@ const SelectPlayersModal = ({
           setters={setters}
           playerHandler={addPlayerHandler}
           home={true}
+          color="green"
         />
         <SelectPlayersList
           players={players4}
           setters={setters}
           playerHandler={addPlayerHandler}
           home={false}
+          color="green"
         />
       </div>
 
